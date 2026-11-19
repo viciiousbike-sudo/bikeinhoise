@@ -1449,6 +1449,12 @@
             <span id="env-badge-label" class="pill-badge neon-pill">
               WhatsApp: (51) 99555-6632
             </span>
+            <button id="btn-test-voice" type="button" class="ghost-btn" title="Ouvir locução agora">
+              🔊 Ouvir
+            </button>
+            <button id="btn-voice-recorder" type="button" class="ghost-btn" title="Gravar ou usar sua própria voz">
+              🎙️ Minha Voz
+            </button>
             <button id="btn-show-rules" type="button" class="ghost-btn">
               Regras
             </button>
@@ -2622,8 +2628,127 @@
     const soundEngine = new TrailSoundEngine();
 
     /* =========================================================================
-       4. LOCUTOR NATURAL EM PT-BR (SELEÇÃO ATIVA, TRECHOS CURTOS E FALLBACK)
+       4. LOCUTOR NATURAL EM PT-BR (PRONÚNCIA "BIKE IN HOUSE" + SUA VOZ)
        ========================================================================= */
+    const CUSTOM_VOICE_STORAGE_KEY = 'bikeinhouse_custom_voice_v1';
+    let customVoiceAudioUrl = null;
+    let customVoicePlayer = null;
+    let activeMediaRecorder = null;
+    let recordedChunks = [];
+
+    function normalizeBrandPronunciationForSpeech(text) {
+      // Garante que o sintetizador pronuncie "Bike in House" com clareza em vez de "biquinhouze"
+      return String(text || '')
+        .replace(/BikeIn'House/gi, 'Bike in House')
+        .replace(/Bike-In-House/gi, 'Bike in House')
+        .replace(/BikeInHouse/gi, 'Bike in House')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function loadSavedCustomVoice() {
+      try {
+        const savedDataUrl = localStorage.getItem(CUSTOM_VOICE_STORAGE_KEY);
+        if (savedDataUrl && savedDataUrl.startsWith('data:audio')) {
+          customVoiceAudioUrl = savedDataUrl;
+        }
+      } catch (e) {}
+    }
+
+    function playCustomVoiceIfAvailable() {
+      try {
+        if (!customVoiceAudioUrl) return false;
+        if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') {
+          window.speechSynthesis.cancel();
+        }
+        if (customVoicePlayer) {
+          customVoicePlayer.pause();
+          customVoicePlayer.currentTime = 0;
+        }
+        customVoicePlayer = new Audio(customVoiceAudioUrl);
+        customVoicePlayer.volume = 1.0;
+        customVoicePlayer.play().catch(() => {
+          soundEngine.ringBikeBell(true);
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function toggleVoiceRecording() {
+      try {
+        // Se já existe uma voz gravada e não está gravando agora, permite regravar ou reproduzir
+        if (activeMediaRecorder && activeMediaRecorder.state === 'recording') {
+          activeMediaRecorder.stop();
+          return;
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') {
+          showToast('Seu navegador não suporta gravação de áudio direta. A locução clara está ativa.', 'info');
+          return;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recordedChunks = [];
+        const recorder = new MediaRecorder(stream);
+        activeMediaRecorder = recorder;
+
+        const btn = document.getElementById('btn-voice-recorder');
+        if (btn) btn.textContent = '⏹️ Parar Gravação';
+
+        showToast('🎙️ Gravando sua voz... Fale: "Olá, bem-vindo à Bike in House, a oficina que vai até você."', 'info');
+
+        recorder.ondataavailable = (event) => {
+          if (event.data && event.data.size > 0) {
+            recordedChunks.push(event.data);
+          }
+        };
+
+        recorder.onstop = () => {
+          try {
+            stream.getTracks().forEach(track => track.stop());
+          } catch (e) {}
+
+          if (btn) btn.textContent = '🎙️ Minha Voz';
+          activeMediaRecorder = null;
+
+          if (recordedChunks.length === 0) return;
+
+          const blob = new Blob(recordedChunks, { type: recorder.mimeType || 'audio/webm' });
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Audio = reader.result;
+            if (typeof base64Audio === 'string') {
+              customVoiceAudioUrl = base64Audio;
+              try {
+                localStorage.setItem(CUSTOM_VOICE_STORAGE_KEY, base64Audio);
+              } catch (storageErr) {
+                // Caso o áudio seja grande para o localStorage, mantém na sessão atual
+              }
+              showToast('✅ Sua voz foi salva! Tocando agora...', 'success');
+              playCustomVoiceIfAvailable();
+            }
+          };
+          reader.readAsDataURL(blob);
+        };
+
+        recorder.start();
+
+        // Encerra automaticamente após 7 segundos caso o usuário não clique em parar
+        setTimeout(() => {
+          if (activeMediaRecorder && activeMediaRecorder.state === 'recording') {
+            activeMediaRecorder.stop();
+          }
+        }, 7000);
+      } catch (err) {
+        const btn = document.getElementById('btn-voice-recorder');
+        if (btn) btn.textContent = '🎙️ Minha Voz';
+        activeMediaRecorder = null;
+        showToast('Não foi possível acessar o microfone. Mantendo a locução clara padrão.', 'error');
+      }
+    }
+
     function selectBestPtBrVoice(voices) {
       if (!Array.isArray(voices) || voices.length === 0) return null;
 
@@ -2663,59 +2788,50 @@
     }
 
     function splitIntoNaturalChunks(text) {
-      const cleaned = String(text || '').replace(/\s+/g, ' ').trim();
-      if (!cleaned) return [];
+      const normalized = normalizeBrandPronunciationForSpeech(text);
+      if (!normalized) return [];
 
-      // Divide por pontuação natural ou vírgulas longas mantendo trechos curtos e fluidos
-      const rawParts = cleaned
-        .split(/(?<=[.!?…])\s+|(?<=,|;|:)\s+/)
+      // Mantém a frase inteira quando curta para evitar cortes ou gagueiras entre trechos
+      if (normalized.length <= 125) {
+        return [normalized];
+      }
+
+      return normalized
+        .split(/(?<=[.!?])\s+/)
         .map(s => s.trim())
         .filter(Boolean);
-
-      const chunks = [];
-      for (const part of rawParts) {
-        if (part.length <= 72) {
-          chunks.push(part);
-        } else {
-          // Quebra trechos longos em respiros curtos próximos de espaços
-          const words = part.split(' ');
-          let current = '';
-          for (const word of words) {
-            const candidate = current ? `${current} ${word}` : word;
-            if (candidate.length > 68 && current) {
-              chunks.push(current);
-              current = word;
-            } else {
-              current = candidate;
-            }
-          }
-          if (current) chunks.push(current);
-        }
-      }
-      return chunks;
     }
 
-    function speakAnnouncer(text) {
+    function speakAnnouncer(text, options = {}) {
+      const { preferCustomVoice = false } = options;
       try {
-        if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
-          soundEngine.ringBikeBell(true);
+        if (preferCustomVoice && playCustomVoiceIfAvailable()) {
           return;
         }
 
-        const chunks = splitIntoNaturalChunks(text);
+        const cleanText = normalizeBrandPronunciationForSpeech(text);
+        if (!cleanText) return;
+
+        // Toca um sinal suave de confirmação para garantir feedback auditivo no preview
+        soundEngine.ringBikeBell(true);
+
+        if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+          showToast(`🔊 ${cleanText}`, 'info');
+          return;
+        }
+
+        const chunks = splitIntoNaturalChunks(cleanText);
         if (chunks.length === 0) return;
 
-        window.speechSynthesis.cancel();
+        try {
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.resume();
+        } catch (e) {}
+
         const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
         const chosenVoice = selectBestPtBrVoice(voices);
 
-        // Fallback suave de áudio / campainha caso não exista voz pt-BR disponível
-        if (!chosenVoice && voices.length === 0) {
-          soundEngine.ringBikeBell(true);
-        }
-
         let index = 0;
-        let finishedAnyChunk = false;
 
         const speakNext = () => {
           if (index >= chunks.length) return;
@@ -2727,35 +2843,28 @@
             if (chosenVoice) {
               utterance.voice = chosenVoice;
             }
-            utterance.rate = 0.96;
+            utterance.rate = 0.95;
             utterance.pitch = 1.0;
-            utterance.volume = 0.95;
+            utterance.volume = 1.0;
 
             utterance.onend = () => {
-              finishedAnyChunk = true;
               if (index < chunks.length) {
-                setTimeout(speakNext, 130);
+                setTimeout(speakNext, 180);
               }
             };
 
             utterance.onerror = () => {
-              if (!finishedAnyChunk && index === 1) {
-                soundEngine.ringBikeBell(true);
-              }
               if (index < chunks.length) {
-                setTimeout(speakNext, 120);
+                setTimeout(speakNext, 160);
               }
             };
 
             window.speechSynthesis.speak(utterance);
-          } catch (err) {
-            if (!finishedAnyChunk) {
-              soundEngine.ringBikeBell(true);
-            }
-          }
+          } catch (err) {}
         };
 
-        speakNext();
+        // Pequeno atraso após resume/cancel evita engolir a primeira sílaba em alguns navegadores
+        setTimeout(speakNext, 90);
       } catch (err) {
         soundEngine.ringBikeBell(true);
       }
@@ -3113,11 +3222,22 @@
       initParticles();
       animateCanvas();
       renderServicesCatalog();
+      loadSavedCustomVoice();
 
       try {
         const todayIso = new Date().toISOString().split('T')[0];
         document.getElementById('input-date').setAttribute('min', todayIso);
       } catch (err) {}
+
+      document.getElementById('btn-voice-recorder').addEventListener('click', () => {
+        soundEngine.initAndStart();
+        toggleVoiceRecording();
+      });
+
+      document.getElementById('btn-test-voice').addEventListener('click', () => {
+        soundEngine.initAndStart();
+        speakAnnouncer("Olá, bem-vindo à Bike in House, a oficina que vai até você.", { preferCustomVoice: true });
+      });
 
       document.getElementById('btn-start-app').addEventListener('click', () => {
         soundEngine.initAndStart();
@@ -3128,7 +3248,7 @@
         document.getElementById('rules-screen').classList.remove('hidden');
 
         setTimeout(() => {
-          speakAnnouncer("Olá! Bem-vindo à BikeIn'House. A oficina móvel que vai até você.");
+          speakAnnouncer("Olá, bem-vindo à Bike in House, a oficina que vai até você.", { preferCustomVoice: true });
         }, 320);
       });
 
@@ -3250,7 +3370,7 @@
         }
 
         soundEngine.ringBikeBell(false);
-        speakAnnouncer("Obrigado pela confiança! Vamos deixar sua bike pronta para rodar.");
+        speakAnnouncer("Obrigado pela confiança! Vamos deixar sua bike in house pronta para rodar.");
 
         const message = buildWhatsAppMessage();
         const waUrl = `https://wa.me/5551995556632?text=${encodeURIComponent(message)}`;
