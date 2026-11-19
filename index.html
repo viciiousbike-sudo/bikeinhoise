@@ -3,170 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>BikeIn'House | Oficina Móvel de Bicicletas e E-Bikes</title>
+  <title>BikeIn'House | Oficina Móvel de Bicicletas e E-Bikes — Porto Alegre</title>
 
   <!-- Meta Tags PWA / Android -->
   <meta name="application-name" content="BikeIn'House" />
   <meta name="apple-mobile-web-app-title" content="BikeIn'House" />
-  <meta name="description" content="BikeIn'House - A oficina móvel de bicicletas e e-bikes que vai até você. Atendimento domiciliar por Vinicius Marquês." />
-  <meta name="theme-color" content="#0c110e" />
+  <meta name="description" content="BikeIn'House - Oficina móvel domiciliar especializada em e-bikes e downhill em Porto Alegre com Vinicius Marquês." />
+  <meta name="theme-color" content="#090c0a" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-  <!-- Manifesto PWA e Registro do Service Worker -->
+  <!-- Manifesto PWA e Ícone -->
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
   <link rel="apple-touch-icon" href="./icon-512.png" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
-    }
-  </script>
 
   <style>
     /* =========================================================================
-       1. DESIGN TOKENS — MATERIAIS REAIS, AÇO ESCOVADO & 6 AMBIENTES NATURAIS
+       1. DESIGN TOKENS — PRETO CARBONO (#090c0a / #111613) & VERDE NÉON
        ========================================================================= */
     :root {
-      --bg-base: #0b0f0d;
+      --bg-carbon: #090c0a;
+      --bg-carbon-elevated: #111613;
       --bg-overlay:
-        radial-gradient(circle at 50% 18%, rgba(28, 38, 33, 0.35) 0%, rgba(9, 13, 11, 0.94) 85%),
-        linear-gradient(180deg, rgba(10, 14, 12, 0.62) 0%, rgba(10, 14, 12, 0.86) 50%, rgba(7, 10, 9, 0.97) 100%);
-      --surface-top: rgba(32, 38, 35, 0.92);
-      --surface-bottom: rgba(18, 22, 20, 0.96);
-      --card-top: rgba(40, 47, 43, 0.92);
-      --card-bottom: rgba(23, 28, 25, 0.96);
-      --accent: #15803d;
-      --accent-mid: #16a34a;
-      --accent-bright: #4ade80;
-      --accent-warm: #d97706;
-      --accent-soft: rgba(22, 163, 74, 0.16);
-      --accent-glow: rgba(22, 163, 74, 0.28);
-      --text-main: #f3f4f6;
+        radial-gradient(circle at 50% 14%, rgba(34, 197, 94, 0.16) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(9, 12, 10, 0.66) 0%, rgba(12, 17, 14, 0.88) 52%, rgba(7, 10, 8, 0.97) 100%);
+      --surface-top: rgba(23, 30, 26, 0.94);
+      --surface-bottom: rgba(12, 16, 14, 0.98);
+      --card-top: rgba(29, 38, 33, 0.94);
+      --card-bottom: rgba(15, 20, 17, 0.98);
+      --neon-core: #22c55e;
+      --neon-bright: #4ade80;
+      --neon-glow: rgba(34, 197, 94, 0.34);
+      --neon-soft: rgba(34, 197, 94, 0.16);
+      --metal-light: #e2e8f0;
+      --metal-mid: #94a3b8;
+      --metal-dark: #334155;
+      --text-main: #f8fafc;
       --text-muted: #cbd5e1;
       --text-dim: #94a3b8;
-      --border-metal: rgba(255, 255, 255, 0.14);
-      --border-accent: rgba(74, 222, 128, 0.34);
-      --specular-edge: rgba(255, 255, 255, 0.14);
-      --card-radius: 18px;
-      --btn-radius: 12px;
-      --shadow-physical:
-        0 24px 48px -12px rgba(0, 0, 0, 0.85),
-        0 4px 12px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 var(--specular-edge);
+      --border-carbon: rgba(255, 255, 255, 0.13);
+      --border-neon: rgba(74, 222, 128, 0.42);
+      --radius-xl: 20px;
+      --radius-lg: 15px;
+      --radius-md: 12px;
+      --shadow-carbon:
+        0 24px 50px -12px rgba(0, 0, 0, 0.88),
+        0 4px 14px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    /* Ambiente 1: Oficina Mecânica Profissional Real */
+    /* Variações sutis de ambiente mantendo a identidade preto carbono + verde néon */
     body.env-1 {
-      --bg-base: #0c100e;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(22, 101, 52, 0.18) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(11, 15, 13, 0.64) 0%, rgba(11, 15, 13, 0.88) 48%, rgba(8, 11, 9, 0.97) 100%);
-      --surface-top: rgba(31, 38, 34, 0.93);
-      --surface-bottom: rgba(17, 21, 19, 0.97);
-      --card-top: rgba(39, 47, 43, 0.93);
-      --card-bottom: rgba(22, 27, 24, 0.97);
-      --accent: #15803d;
-      --accent-mid: #16a34a;
-      --accent-bright: #4ade80;
-      --accent-soft: rgba(22, 163, 74, 0.16);
-      --accent-glow: rgba(22, 163, 74, 0.30);
-      --border-accent: rgba(74, 222, 128, 0.34);
+        radial-gradient(circle at 50% 14%, rgba(34, 197, 94, 0.18) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(9, 12, 10, 0.65) 0%, rgba(12, 17, 14, 0.88) 52%, rgba(7, 10, 8, 0.97) 100%);
     }
 
-    /* Ambiente 2: Garagem Residencial & Pátio Ensolarado */
     body.env-2 {
-      --bg-base: #14110d;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(217, 119, 6, 0.20) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(22, 18, 13, 0.60) 0%, rgba(20, 16, 12, 0.87) 48%, rgba(14, 11, 8, 0.97) 100%);
-      --surface-top: rgba(44, 37, 29, 0.93);
-      --surface-bottom: rgba(25, 21, 16, 0.97);
-      --card-top: rgba(54, 45, 35, 0.93);
-      --card-bottom: rgba(31, 26, 20, 0.97);
-      --accent: #b45309;
-      --accent-mid: #d97706;
-      --accent-bright: #fbbf24;
-      --accent-soft: rgba(217, 119, 6, 0.18);
-      --accent-glow: rgba(217, 119, 6, 0.32);
-      --border-accent: rgba(251, 191, 36, 0.38);
+        radial-gradient(circle at 50% 14%, rgba(74, 222, 128, 0.16) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(10, 14, 11, 0.64) 0%, rgba(14, 19, 16, 0.88) 52%, rgba(8, 11, 9, 0.97) 100%);
     }
 
-    /* Ambiente 3: Trilha Natural na Floresta & Montanha */
     body.env-3 {
-      --bg-base: #0b130f;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(5, 150, 105, 0.18) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(10, 20, 15, 0.58) 0%, rgba(10, 19, 14, 0.86) 48%, rgba(7, 14, 10, 0.97) 100%);
-      --surface-top: rgba(24, 39, 31, 0.93);
-      --surface-bottom: rgba(14, 24, 19, 0.97);
-      --card-top: rgba(31, 49, 39, 0.93);
-      --card-bottom: rgba(18, 30, 24, 0.97);
-      --accent: #047857;
-      --accent-mid: #059669;
-      --accent-bright: #34d399;
-      --accent-soft: rgba(5, 150, 105, 0.18);
-      --accent-glow: rgba(5, 150, 105, 0.30);
-      --border-accent: rgba(52, 211, 153, 0.36);
+        radial-gradient(circle at 50% 14%, rgba(22, 163, 74, 0.22) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(8, 14, 10, 0.62) 0%, rgba(11, 18, 13, 0.87) 52%, rgba(7, 11, 8, 0.97) 100%);
     }
 
-    /* Ambiente 4: Estrada Panorâmica na Serra ao Entardecer */
     body.env-4 {
-      --bg-base: #150f0c;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(234, 88, 12, 0.20) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(25, 17, 13, 0.58) 0%, rgba(22, 15, 11, 0.87) 48%, rgba(15, 10, 8, 0.97) 100%);
-      --surface-top: rgba(46, 32, 26, 0.93);
-      --surface-bottom: rgba(26, 18, 15, 0.97);
-      --card-top: rgba(56, 39, 31, 0.93);
-      --card-bottom: rgba(32, 22, 18, 0.97);
-      --accent: #c2410c;
-      --accent-mid: #ea580c;
-      --accent-bright: #fb923c;
-      --accent-soft: rgba(234, 88, 12, 0.18);
-      --accent-glow: rgba(234, 88, 12, 0.32);
-      --border-accent: rgba(251, 146, 60, 0.38);
+        radial-gradient(circle at 50% 14%, rgba(74, 222, 128, 0.15) 0%, rgba(9, 12, 10, 0.93) 78%),
+        linear-gradient(180deg, rgba(11, 14, 12, 0.65) 0%, rgba(15, 20, 17, 0.89) 52%, rgba(8, 11, 9, 0.97) 100%);
     }
 
-    /* Ambiente 5: Vale do Rio & Estrada de Cascalho */
     body.env-5 {
-      --bg-base: #0c1216;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(2, 132, 199, 0.18) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(12, 21, 27, 0.58) 0%, rgba(11, 19, 24, 0.87) 48%, rgba(8, 14, 18, 0.97) 100%);
-      --surface-top: rgba(25, 38, 46, 0.93);
-      --surface-bottom: rgba(15, 23, 28, 0.97);
-      --card-top: rgba(32, 48, 58, 0.93);
-      --card-bottom: rgba(19, 29, 35, 0.97);
-      --accent: #0369a1;
-      --accent-mid: #0284c7;
-      --accent-bright: #38bdf8;
-      --accent-soft: rgba(2, 132, 199, 0.18);
-      --accent-glow: rgba(2, 132, 199, 0.30);
-      --border-accent: rgba(56, 189, 248, 0.38);
+        radial-gradient(circle at 50% 14%, rgba(34, 197, 94, 0.17) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(9, 13, 12, 0.64) 0%, rgba(12, 17, 16, 0.88) 52%, rgba(7, 10, 9, 0.97) 100%);
     }
 
-    /* Ambiente 6: Entrega na Porta de Casa */
     body.env-6 {
-      --bg-base: #0d1410;
       --bg-overlay:
-        radial-gradient(circle at 50% 15%, rgba(22, 163, 74, 0.20) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(12, 22, 17, 0.58) 0%, rgba(11, 20, 15, 0.86) 48%, rgba(8, 14, 11, 0.97) 100%);
-      --surface-top: rgba(24, 40, 32, 0.93);
-      --surface-bottom: rgba(14, 24, 19, 0.97);
-      --card-top: rgba(31, 51, 40, 0.93);
-      --card-bottom: rgba(18, 31, 24, 0.97);
-      --accent: #15803d;
-      --accent-mid: #16a34a;
-      --accent-bright: #4ade80;
-      --accent-soft: rgba(22, 163, 74, 0.18);
-      --accent-glow: rgba(22, 163, 74, 0.34);
-      --border-accent: rgba(74, 222, 128, 0.40);
+        radial-gradient(circle at 50% 14%, rgba(74, 222, 128, 0.20) 0%, rgba(9, 12, 10, 0.92) 78%),
+        linear-gradient(180deg, rgba(9, 13, 10, 0.62) 0%, rgba(13, 19, 15, 0.87) 52%, rgba(7, 10, 8, 0.97) 100%);
     }
 
     *, *::before, *::after {
@@ -181,16 +105,19 @@
       width: 100%;
       overflow-x: hidden;
       font-family: var(--font-sans);
-      background-color: var(--bg-base);
+      background-color: var(--bg-carbon);
       color: var(--text-main);
       line-height: 1.5;
-      transition: background-color 0.6s ease, color 0.35s ease;
+      transition: background-color 0.5s ease, color 0.3s ease;
     }
 
     .hidden {
       display: none !important;
     }
 
+    /* =========================================================================
+       2. CENÁRIO FOTOGRÁFICO REALISTA + TEXTURA DE FIBRA DE CARBONO + CANVAS
+       ========================================================================= */
     #realistic-backdrop {
       position: fixed;
       inset: 0;
@@ -205,15 +132,18 @@
       object-fit: cover;
       object-position: center;
       transform: scale(1.03);
-      transition: opacity 0.65s ease, transform 10s ease-out;
-      filter: saturate(1.08) contrast(1.06) brightness(0.92);
+      transition: opacity 0.6s ease, transform 12s ease-out;
+      filter: saturate(1.06) contrast(1.08) brightness(0.86);
     }
 
     #realistic-bg-shade {
       position: absolute;
       inset: 0;
-      background: var(--bg-overlay);
-      transition: background 0.6s ease;
+      background:
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 4px),
+        repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.16) 0px, rgba(0, 0, 0, 0.16) 1px, transparent 1px, transparent 4px),
+        var(--bg-overlay);
+      transition: background 0.5s ease;
     }
 
     #env-canvas {
@@ -225,6 +155,9 @@
       z-index: 1;
     }
 
+    /* =========================================================================
+       3. NOTIFICAÇÕES TOAST & COMPONENTES METÁLICOS EM CARBONO + VERDE NÉON
+       ========================================================================= */
     #toast-container {
       position: fixed;
       top: 14px;
@@ -232,7 +165,7 @@
       transform: translateX(-50%);
       z-index: 9999;
       width: 92%;
-      max-width: 480px;
+      max-width: 500px;
       pointer-events: none;
       display: flex;
       flex-direction: column;
@@ -242,131 +175,144 @@
     .toast-item {
       pointer-events: auto;
       padding: 13px 16px;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       border: 1px solid rgba(74, 222, 128, 0.55);
-      border-left: 5px solid #22c55e;
-      background: linear-gradient(180deg, rgba(24, 33, 28, 0.98), rgba(14, 20, 17, 0.98));
+      border-left: 5px solid var(--neon-core);
+      background: linear-gradient(180deg, rgba(20, 28, 23, 0.98), rgba(10, 14, 12, 0.98));
       color: #f8fafc;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.82), inset 0 1px 0 rgba(255, 255, 255, 0.12);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .toast-item.error {
       border-color: rgba(248, 113, 113, 0.55);
       border-left-color: #ef4444;
-      background: linear-gradient(180deg, rgba(46, 20, 22, 0.98), rgba(28, 12, 14, 0.98));
+      background: linear-gradient(180deg, rgba(46, 18, 20, 0.98), rgba(24, 10, 12, 0.98));
       color: #fee2e2;
     }
 
     .toast-item.info {
-      border-color: rgba(251, 191, 36, 0.55);
-      border-left-color: #f59e0b;
-      background: linear-gradient(180deg, rgba(42, 33, 18, 0.98), rgba(25, 20, 11, 0.98));
-      color: #fef3c7;
+      border-color: rgba(74, 222, 128, 0.45);
+      border-left-color: var(--neon-bright);
+      background: linear-gradient(180deg, rgba(18, 27, 22, 0.98), rgba(10, 14, 12, 0.98));
+      color: #dcfce7;
     }
 
-    .env-surface {
+    .carbon-panel {
       position: relative;
       background:
-        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0) 0 0 / 8px 8px,
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 5px),
         linear-gradient(180deg, var(--surface-top) 0%, var(--surface-bottom) 100%);
-      border: 1px solid var(--border-metal);
-      border-top-color: rgba(255, 255, 255, 0.22);
-      border-radius: var(--card-radius);
-      box-shadow: var(--shadow-physical);
+      border: 1px solid var(--border-carbon);
+      border-top-color: rgba(74, 222, 128, 0.28);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-carbon);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      transition: background 0.5s ease, border-color 0.45s ease, box-shadow 0.45s ease;
     }
 
-    .bolt-corner {
+    .rivet-corner {
       position: absolute;
       width: 9px;
       height: 9px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 55%, #1e293b 100%);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), inset 0 0 1px rgba(255, 255, 255, 0.6);
+      background: radial-gradient(circle at 35% 35%, #f1f5f9 0%, #64748b 58%, #1e293b 100%);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), inset 0 0 1px rgba(255, 255, 255, 0.65);
       pointer-events: none;
       z-index: 3;
-      opacity: 0.72;
+      opacity: 0.75;
     }
-    .bolt-corner::after {
-      content: "";
-      position: absolute;
-      inset: 2.5px;
-      background: #1e293b;
-      clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-    }
-    .bolt-tl { top: 10px; left: 10px; }
-    .bolt-tr { top: 10px; right: 10px; }
-    .bolt-bl { bottom: 10px; left: 10px; }
-    .bolt-br { bottom: 10px; right: 10px; }
+    .rivet-tl { top: 11px; left: 11px; }
+    .rivet-tr { top: 11px; right: 11px; }
+    .rivet-bl { bottom: 11px; left: 11px; }
+    .rivet-br { bottom: 11px; right: 11px; }
 
-    .env-card {
+    .carbon-card {
       background: linear-gradient(180deg, var(--card-top) 0%, var(--card-bottom) 100%);
       border: 1px solid rgba(255, 255, 255, 0.11);
       border-top-color: rgba(255, 255, 255, 0.18);
-      border-radius: 14px;
+      border-radius: var(--radius-lg);
       box-shadow:
-        0 10px 22px -6px rgba(0, 0, 0, 0.65),
+        0 10px 24px -6px rgba(0, 0, 0, 0.72),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      transition: transform 0.22s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.45s ease;
+      transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .env-btn {
+    .neon-btn {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      border-bottom: 3px solid rgba(0, 0, 0, 0.55);
-      background: linear-gradient(180deg, var(--accent-mid) 0%, var(--accent) 100%);
+      border: 1px solid rgba(187, 247, 208, 0.45);
+      border-bottom: 3px solid #14532d;
+      background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
       color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
       font-family: var(--font-sans);
       font-weight: 800;
-      border-radius: var(--btn-radius);
+      border-radius: var(--radius-md);
       box-shadow:
-        0 10px 24px -4px rgba(0, 0, 0, 0.7),
-        0 4px 16px var(--accent-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32);
+        0 10px 24px -4px rgba(0, 0, 0, 0.75),
+        0 0 18px var(--neon-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
       cursor: pointer;
       transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
 
-    .env-btn:hover {
+    .neon-btn:hover {
       transform: translateY(-1px);
       filter: brightness(1.08);
       box-shadow:
-        0 14px 28px -4px rgba(0, 0, 0, 0.78),
-        0 6px 20px var(--accent-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        0 14px 28px -4px rgba(0, 0, 0, 0.85),
+        0 0 24px rgba(74, 222, 128, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42);
     }
 
-    .env-btn:active {
+    .neon-btn:active {
       transform: translateY(2px);
       border-bottom-width: 1px;
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.75),
-        inset 0 2px 4px rgba(0, 0, 0, 0.35);
     }
 
-    .env-accent-text {
-      color: var(--accent-bright);
-      transition: color 0.4s ease;
+    .neon-text {
+      color: var(--neon-bright);
+      text-shadow: 0 0 12px rgba(74, 222, 128, 0.25);
     }
 
-    .env-accent-bg {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.25));
-      background-color: var(--accent-soft);
-      border: 1px solid var(--border-accent);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      transition: all 0.4s ease;
+    .neon-pill {
+      background: linear-gradient(180deg, rgba(74, 222, 128, 0.22), rgba(21, 128, 61, 0.22));
+      border: 1px solid var(--border-neon);
+      color: var(--neon-bright);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 12px rgba(34, 197, 94, 0.15);
     }
 
+    .ghost-btn {
+      padding: 7px 13px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+      color: #f8fafc;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(74, 222, 128, 0.14);
+      border-color: rgba(74, 222, 128, 0.42);
+    }
+
+    .ghost-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* =========================================================================
+       4. ETAPA 1: VINHETA INICIAL (E-BIKES & DOWNHILL)
+       ========================================================================= */
     #splash-screen {
       position: relative;
       z-index: 30;
@@ -380,8 +326,8 @@
 
     .splash-box {
       width: 100%;
-      max-width: 590px;
-      padding: 26px;
+      max-width: 620px;
+      padding: 24px;
     }
 
     @media (min-width: 640px) {
@@ -394,21 +340,21 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       padding: 6px;
       border-radius: 14px;
-      background: rgba(8, 11, 9, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+      background: rgba(7, 10, 8, 0.85);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.85);
     }
 
     .splash-bike-slot {
+      position: relative;
       height: 112px;
       border-radius: 10px;
       overflow: hidden;
-      background: #101613;
+      background: #0d120f;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
     }
 
     @media (min-width: 640px) {
@@ -424,17 +370,32 @@
       display: block;
     }
 
+    .slot-tag {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(9, 12, 10, 0.84);
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      color: #4ade80;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
     .emblem-wrap {
       width: 184px;
       height: 184px;
-      margin: 0 auto 16px auto;
+      margin: 0 auto 14px auto;
       animation: pulseEmblem 4s ease-in-out infinite;
     }
 
     @media (min-width: 640px) {
       .emblem-wrap {
-        width: 214px;
-        height: 214px;
+        width: 212px;
+        height: 212px;
       }
     }
 
@@ -444,7 +405,7 @@
       font-weight: 900;
       letter-spacing: -0.02em;
       color: #ffffff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
     }
 
     @media (min-width: 640px) {
@@ -454,11 +415,14 @@
     }
 
     .splash-desc {
-      margin: 0 0 24px 0;
-      font-size: 0.95rem;
+      margin: 0 0 22px 0;
+      font-size: 0.94rem;
       color: #e2e8f0;
     }
 
+    /* =========================================================================
+       5. ETAPA 2: TELA OBRIGATÓRIA DE REGRAS E CONDIÇÕES
+       ========================================================================= */
     #rules-screen {
       position: relative;
       z-index: 25;
@@ -471,7 +435,7 @@
 
     .rules-box {
       width: 100%;
-      max-width: 790px;
+      max-width: 800px;
       padding: 24px;
     }
 
@@ -489,7 +453,7 @@
       gap: 14px;
       padding-bottom: 18px;
       margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
     }
 
     .brand-lockup {
@@ -499,16 +463,25 @@
     }
 
     .brand-icon-box {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       border-radius: 13px;
-      background: linear-gradient(145deg, #1b241f, #0c120f);
-      border: 1.5px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      background: linear-gradient(145deg, #19221d, #090d0b);
+      border: 1.5px solid rgba(74, 222, 128, 0.36);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+    }
+
+    .pill-badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
     }
 
     .rules-list {
@@ -530,7 +503,7 @@
       height: 30px;
       border-radius: 8px;
       background: linear-gradient(180deg, #22c55e, #15803d);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(187, 247, 208, 0.4);
       color: #ffffff;
       font-family: var(--font-mono);
       font-weight: 900;
@@ -540,7 +513,7 @@
       justify-content: center;
       flex-shrink: 0;
       margin-top: 2px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), 0 0 10px rgba(34, 197, 94, 0.25);
     }
 
     .rule-text {
@@ -554,10 +527,10 @@
       align-items: center;
       gap: 12px;
       padding: 16px;
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(22, 101, 52, 0.28), rgba(13, 56, 30, 0.36));
-      border: 1.5px solid rgba(74, 222, 128, 0.45);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(21, 128, 61, 0.26), rgba(11, 28, 17, 0.45));
+      border: 1.5px solid rgba(74, 222, 128, 0.48);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 16px rgba(34, 197, 94, 0.12);
       cursor: pointer;
       margin-bottom: 18px;
       user-select: none;
@@ -566,16 +539,19 @@
     .accept-box input[type="checkbox"] {
       width: 22px;
       height: 22px;
-      accent-color: #16a34a;
+      accent-color: #22c55e;
       cursor: pointer;
       flex-shrink: 0;
     }
 
+    /* =========================================================================
+       6. ETAPA 3: RECEPÇÃO DA OFICINA + 6 BOTÕES LADO A LADO
+       ========================================================================= */
     #workshop-screen {
       position: relative;
       z-index: 20;
       min-height: 100vh;
-      padding-bottom: 56px;
+      padding-bottom: 60px;
     }
 
     .sticky-header {
@@ -583,12 +559,12 @@
       top: 0;
       z-index: 40;
       background:
-        radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 0) 0 0 / 6px 6px,
-        linear-gradient(180deg, rgba(16, 20, 18, 0.94) 0%, rgba(10, 13, 11, 0.97) 100%);
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 5px),
+        linear-gradient(180deg, rgba(17, 22, 19, 0.96) 0%, rgba(9, 12, 10, 0.98) 100%);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.78);
+      border-bottom: 1.5px solid rgba(74, 222, 128, 0.24);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.82);
     }
 
     .container {
@@ -612,36 +588,6 @@
       gap: 8px;
     }
 
-    .pill-badge {
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      white-space: nowrap;
-      letter-spacing: 0.02em;
-    }
-
-    .ghost-btn {
-      padding: 7px 13px;
-      border-radius: 10px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-      color: #ffffff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-
-    .ghost-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-    }
-
-    .ghost-btn:active {
-      transform: translateY(1px);
-    }
-
     #nav-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -657,10 +603,10 @@
 
     .nav-box-btn {
       position: relative;
-      background: linear-gradient(180deg, rgba(38, 44, 41, 0.92) 0%, rgba(20, 24, 22, 0.96) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-bottom: 3px solid rgba(0, 0, 0, 0.65);
-      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(28, 36, 31, 0.95) 0%, rgba(13, 17, 15, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.72);
+      border-radius: var(--radius-md);
       padding: 7px 4px;
       display: flex;
       flex-direction: column;
@@ -668,7 +614,7 @@
       justify-content: center;
       text-align: center;
       color: #f1f5f9;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
       cursor: pointer;
       transition: transform 0.18s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
       min-width: 0;
@@ -681,7 +627,7 @@
     }
 
     .nav-box-btn:hover {
-      border-color: rgba(255, 255, 255, 0.32);
+      border-color: rgba(74, 222, 128, 0.45);
       transform: translateY(-1px);
     }
 
@@ -691,19 +637,19 @@
     }
 
     .nav-box-btn.active {
-      background: linear-gradient(180deg, var(--accent-soft), rgba(18, 24, 21, 0.98));
-      border-color: var(--accent-bright);
-      border-bottom: 3px solid var(--accent);
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(12, 19, 15, 0.98));
+      border-color: var(--neon-bright);
+      border-bottom: 3px solid var(--neon-core);
       box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.65),
-        0 0 14px var(--accent-glow),
+        0 8px 20px rgba(0, 0, 0, 0.7),
+        0 0 16px var(--neon-glow),
         inset 0 1px 0 rgba(255, 255, 255, 0.22);
       transform: translateY(-1px);
     }
 
     .nav-box-btn.locked {
-      opacity: 0.58;
-      background: linear-gradient(180deg, rgba(24, 28, 26, 0.9), rgba(14, 17, 15, 0.95));
+      opacity: 0.56;
+      background: linear-gradient(180deg, rgba(20, 25, 22, 0.9), rgba(10, 13, 11, 0.96));
     }
 
     .nav-btn-meta {
@@ -738,7 +684,7 @@
       height: 8px;
       border-radius: 50%;
       display: inline-block;
-      border: 1px solid rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.65);
     }
 
     .led-amber {
@@ -748,14 +694,14 @@
 
     .led-green {
       background: radial-gradient(circle at 35% 35%, #bbf7d0 0%, #22c55e 65%, #15803d 100%);
-      box-shadow: 0 0 6px rgba(34, 197, 94, 0.85);
+      box-shadow: 0 0 7px rgba(74, 222, 128, 0.95);
     }
 
     .nav-btn-icon {
       width: 24px;
       height: 24px;
       margin-bottom: 4px;
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.65));
     }
 
     @media (min-width: 640px) {
@@ -794,6 +740,9 @@
       }
     }
 
+    /* =========================================================================
+       7. VITRINE E-BIKES & DOWNHILL + PROGRESSO + PAINÉIS 01 A 06
+       ========================================================================= */
     .main-stack {
       padding-top: 18px;
       display: flex;
@@ -817,7 +766,7 @@
       position: relative;
       height: 235px;
       overflow: hidden;
-      background: #0b0f0d;
+      background: #090c0a;
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -830,7 +779,7 @@
     @media (min-width: 900px) {
       .featured-photo-box {
         height: auto;
-        min-height: 265px;
+        min-height: 268px;
         border-bottom: none;
         border-right: 1px solid rgba(255, 255, 255, 0.12);
       }
@@ -862,10 +811,10 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       padding: 6px;
-      border-radius: 12px;
-      background: rgba(8, 11, 9, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.75);
+      border-radius: var(--radius-md);
+      background: rgba(7, 10, 8, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
     }
 
     @media (min-width: 640px) {
@@ -880,10 +829,10 @@
       height: 76px;
       border-radius: 9px;
       overflow: hidden;
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
-      background: #0d1310;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      background: #0b0f0c;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
       transition: border-color 0.2s ease, transform 0.2s ease;
     }
 
@@ -894,7 +843,7 @@
     }
 
     .bike-thumb-btn:hover {
-      border-color: var(--accent-bright);
+      border-color: var(--neon-bright);
       transform: translateY(-2px);
     }
 
@@ -906,30 +855,30 @@
     }
 
     .progress-box {
-      background: linear-gradient(180deg, rgba(10, 14, 12, 0.72), rgba(16, 21, 18, 0.85));
+      background: linear-gradient(180deg, rgba(9, 13, 10, 0.82), rgba(15, 20, 17, 0.9));
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 12px 14px;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.65);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.72);
     }
 
     .progress-track {
       width: 100%;
       height: 9px;
       border-radius: 999px;
-      background: #070a08;
+      background: #060807;
       border: 1px solid rgba(255, 255, 255, 0.08);
       overflow: hidden;
       margin-top: 6px;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.92);
     }
 
     #progress-bar {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-bright));
-      box-shadow: 0 0 10px var(--accent-glow);
+      background: linear-gradient(90deg, #15803d, #22c55e, #4ade80);
+      box-shadow: 0 0 12px var(--neon-glow);
       transition: width 0.45s ease;
     }
 
@@ -1003,9 +952,9 @@
       width: 100%;
       padding: 13px 15px;
       border-radius: 11px;
-      background: linear-gradient(180deg, rgba(8, 11, 9, 0.86), rgba(14, 18, 16, 0.82));
+      background: linear-gradient(180deg, rgba(7, 10, 8, 0.9), rgba(13, 18, 15, 0.86));
       border: 1.5px solid rgba(255, 255, 255, 0.14);
-      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.75);
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.78);
       color: #ffffff;
       font-family: var(--font-sans);
       font-size: 0.95rem;
@@ -1018,8 +967,8 @@
     }
 
     .field-input:focus {
-      border-color: var(--accent-bright);
-      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.75), 0 0 0 3px var(--accent-soft);
+      border-color: var(--neon-bright);
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.78), 0 0 0 3px var(--neon-soft);
     }
 
     .preset-times-row {
@@ -1032,10 +981,10 @@
     .preset-time-btn {
       padding: 6px 11px;
       border-radius: 8px;
-      background: linear-gradient(180deg, rgba(42, 48, 44, 0.9), rgba(22, 26, 24, 0.95));
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.6);
-      color: #fde68a;
+      background: linear-gradient(180deg, rgba(28, 36, 31, 0.95), rgba(14, 19, 16, 0.98));
+      border: 1px solid rgba(74, 222, 128, 0.28);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.65);
+      color: #86efac;
       font-family: var(--font-mono);
       font-size: 0.78rem;
       font-weight: 700;
@@ -1043,7 +992,8 @@
     }
 
     .preset-time-btn:hover {
-      border-color: var(--accent-bright);
+      border-color: var(--neon-bright);
+      color: #ffffff;
     }
 
     .local-checks-grid {
@@ -1075,13 +1025,13 @@
     }
 
     .check-card-label:hover {
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(74, 222, 128, 0.35);
     }
 
     .check-card-label input[type="checkbox"] {
       width: 21px;
       height: 21px;
-      accent-color: var(--accent-mid);
+      accent-color: #22c55e;
       flex-shrink: 0;
       cursor: pointer;
     }
@@ -1109,16 +1059,16 @@
     }
 
     .service-item-label.selected {
-      border-color: var(--accent-bright);
-      background: linear-gradient(180deg, var(--accent-soft), rgba(18, 25, 21, 0.96));
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      border-color: var(--neon-bright);
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.2), rgba(13, 19, 15, 0.97));
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.65), 0 0 14px rgba(34, 197, 94, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.14);
     }
 
     .service-item-label input[type="checkbox"] {
       width: 21px;
       height: 21px;
       margin-top: 2px;
-      accent-color: var(--accent-mid);
+      accent-color: #22c55e;
       flex-shrink: 0;
       cursor: pointer;
     }
@@ -1146,10 +1096,10 @@
 
     .pix-warning-box {
       padding: 15px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, rgba(180, 83, 9, 0.24), rgba(120, 53, 15, 0.28));
-      border: 1.5px solid rgba(251, 191, 36, 0.55);
-      color: #fef3c7;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(21, 128, 61, 0.22), rgba(10, 24, 15, 0.36));
+      border: 1.5px solid rgba(74, 222, 128, 0.45);
+      color: #dcfce7;
       font-size: 0.875rem;
     }
 
@@ -1160,8 +1110,8 @@
       background: #ffffff;
       padding: 12px;
       margin: 0 auto 14px auto;
-      border: 3px solid #cbd5e1;
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.65);
+      border: 3px solid #4ade80;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.72), 0 0 16px rgba(74, 222, 128, 0.25);
     }
 
     .whatsapp-preview-pre {
@@ -1169,11 +1119,11 @@
       font-family: var(--font-sans);
       font-size: 0.875rem;
       color: #f1f5f9;
-      background: rgba(8, 11, 9, 0.82);
+      background: rgba(7, 10, 8, 0.86);
       padding: 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.75);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.78);
       max-height: 310px;
       overflow-y: auto;
       margin: 0;
@@ -1194,8 +1144,8 @@
     }
 
     @keyframes pulseEmblem {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.78)); }
-      50% { transform: scale(1.018); filter: drop-shadow(0 16px 30px rgba(22, 163, 74, 0.35)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.82)); }
+      50% { transform: scale(1.018); filter: drop-shadow(0 16px 30px rgba(74, 222, 128, 0.34)); }
     }
 
     @keyframes bikePhotoFloat {
@@ -1229,10 +1179,11 @@
 </head>
 <body class="env-1">
 
+  <!-- FUNDO FOTOGRÁFICO REALISTA (E-BIKES & DOWNHILL) -->
   <div id="realistic-backdrop">
     <img id="realistic-bg-img"
-      src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=1600&q=85"
-      alt="Oficina Móvel de Bicicletas"
+      src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1600&q=85"
+      alt="Bicicleta Elétrica e Downhill em Trilha"
       onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;" />
     <div id="realistic-bg-shade"></div>
   </div>
@@ -1240,30 +1191,32 @@
   <canvas id="env-canvas"></canvas>
   <div id="toast-container"></div>
 
-  <!-- ETAPA 1: VINHETA INICIAL -->
+  <!-- =======================================================================
+       ETAPA 1: VINHETA INICIAL (E-BIKES & DOWNHILL)
+       ======================================================================= -->
   <section id="splash-screen">
-    <div class="env-surface splash-box">
-      <span class="bolt-corner bolt-tl"></span>
-      <span class="bolt-corner bolt-tr"></span>
-      <span class="bolt-corner bolt-bl"></span>
-      <span class="bolt-corner bolt-br"></span>
+    <div class="carbon-panel splash-box">
+      <span class="rivet-corner rivet-tl"></span>
+      <span class="rivet-corner rivet-tr"></span>
+      <span class="rivet-corner rivet-bl"></span>
+      <span class="rivet-corner rivet-br"></span>
 
       <div class="splash-bikes-strip">
         <div class="splash-bike-slot">
           <img src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=800&q=85"
-               alt="Bicicleta 1"
+               alt="Bicicleta na Trilha"
                onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                class="bike-photo-live" />
         </div>
         <div class="splash-bike-slot">
-          <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=800&q=85"
-               alt="Bicicleta 2"
+          <img src="https://images.unsplash.com/photo-1618762044398-ec1e7e048bbd?auto=format&fit=crop&w=800&q=85"
+               alt="Bicicleta Elétrica E-Bike"
                onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                class="bike-photo-live" style="animation-delay: -3s;" />
         </div>
         <div class="splash-bike-slot">
-          <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&q=85"
-               alt="Bicicleta 3"
+          <img src="https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=800&q=85"
+               alt="Bicicleta Mountain Bike"
                onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                class="bike-photo-live" style="animation-delay: -6s;" />
         </div>
@@ -1278,15 +1231,15 @@
               <stop offset="70%" stop-color="#334155"/>
               <stop offset="100%" stop-color="#cbd5e1"/>
             </linearGradient>
-            <linearGradient id="anodizedDark" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#1b2620"/>
-              <stop offset="50%" stop-color="#0d1410"/>
-              <stop offset="100%" stop-color="#070b09"/>
+            <linearGradient id="carbonCore" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#17201b"/>
+              <stop offset="50%" stop-color="#0b0f0d"/>
+              <stop offset="100%" stop-color="#070a08"/>
             </linearGradient>
-            <linearGradient id="emeraldAlloy" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="neonAlloy" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#86efac"/>
               <stop offset="45%" stop-color="#22c55e"/>
-              <stop offset="100%" stop-color="#14532d"/>
+              <stop offset="100%" stop-color="#15803d"/>
             </linearGradient>
             <linearGradient id="chromeTool" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#ffffff"/>
@@ -1296,16 +1249,16 @@
           </defs>
 
           <rect x="10" y="10" width="300" height="300" rx="64" fill="url(#metalRim)"/>
-          <rect x="16" y="16" width="288" height="288" rx="58" fill="url(#anodizedDark)" stroke="#090d0b" stroke-width="3"/>
-          <rect x="22" y="22" width="276" height="276" rx="53" fill="none" stroke="url(#emeraldAlloy)" stroke-width="2.5" stroke-opacity="0.78"/>
+          <rect x="16" y="16" width="288" height="288" rx="58" fill="url(#carbonCore)" stroke="#090c0a" stroke-width="3"/>
+          <rect x="22" y="22" width="276" height="276" rx="53" fill="none" stroke="url(#neonAlloy)" stroke-width="2.5" stroke-opacity="0.85"/>
 
           <circle cx="44" cy="44" r="4" fill="#94a3b8"/>
           <circle cx="276" cy="44" r="4" fill="#94a3b8"/>
           <circle cx="44" cy="276" r="4" fill="#94a3b8"/>
           <circle cx="276" cy="276" r="4" fill="#94a3b8"/>
 
-          <path d="M 78 132 L 160 66 L 204 102 L 204 82 L 222 82 L 222 116 L 242 132" fill="none" stroke="url(#emeraldAlloy)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M 94 122 L 94 195 M 226 122 L 226 155" fill="none" stroke="url(#emeraldAlloy)" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 78 132 L 160 66 L 204 102 L 204 82 L 222 82 L 222 116 L 242 132" fill="none" stroke="url(#neonAlloy)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M 94 122 L 94 195 M 226 122 L 226 155" fill="none" stroke="url(#neonAlloy)" stroke-width="4.5" stroke-linecap="round"/>
           <rect x="148" y="102" width="10" height="10" rx="1.5" fill="#4ade80"/>
           <rect x="162" y="102" width="10" height="10" rx="1.5" fill="#4ade80"/>
           <rect x="148" y="116" width="10" height="10" rx="1.5" fill="#4ade80"/>
@@ -1336,9 +1289,9 @@
               <line x1="199" y1="190" x2="245" y2="190" stroke="#64748b" stroke-width="1.2"/>
               <circle cx="222" cy="190" r="5.5" fill="#22c55e"/>
             </g>
-            <path d="M 96 190 L 134 152 L 152 192 Z" fill="none" stroke="url(#emeraldAlloy)" stroke-width="4.5" stroke-linejoin="round"/>
-            <path d="M 134 152 L 194 142 L 152 192" fill="none" stroke="url(#emeraldAlloy)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="155" y="156" width="28" height="11" rx="4" transform="rotate(-48 169 161)" fill="#0c1c13" stroke="#86efac" stroke-width="1.8"/>
+            <path d="M 96 190 L 134 152 L 152 192 Z" fill="none" stroke="url(#neonAlloy)" stroke-width="4.5" stroke-linejoin="round"/>
+            <path d="M 134 152 L 194 142 L 152 192" fill="none" stroke="url(#neonAlloy)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="155" y="156" width="28" height="11" rx="4" transform="rotate(-48 169 161)" fill="#0b1f14" stroke="#86efac" stroke-width="1.8"/>
             <line x1="191" y1="133" x2="222" y2="190" stroke="url(#chromeTool)" stroke-width="5.5" stroke-linecap="round"/>
             <path d="M 183 132 L 196 132 L 203 128" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round"/>
             <line x1="134" y1="152" x2="128" y2="134" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
@@ -1354,13 +1307,13 @@
       </div>
 
       <h1 class="splash-title">
-        Oficina Móvel <span style="color:#4ade80;">BikeIn'House</span>
+        Oficina Móvel <span class="neon-text">BikeIn'House</span>
       </h1>
       <p class="splash-desc">
-        Atendimento domiciliar especializado para bicicletas e e-bikes com estrutura completa montada na sua residência por <strong>Vinicius Marquês</strong>.
+        Atendimento domiciliar em <strong>Porto Alegre</strong> especializado em bicicletas e e-bikes com oficina montada na sua casa por <strong>Vinicius Marquês</strong>.
       </p>
 
-      <button id="btn-start-app" type="button" class="env-btn" style="width:100%; padding:16px 24px; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.04em;">
+      <button id="btn-start-app" type="button" class="neon-btn" style="width:100%; padding:16px 24px; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.04em;">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor">
           <polygon points="5 3 19 12 5 21 5 3"/>
         </svg>
@@ -1369,36 +1322,42 @@
     </div>
   </section>
 
-  <!-- ETAPA 2: TELA OBRIGATÓRIA DE REGRAS E CONDIÇÕES -->
+  <!-- =======================================================================
+       ETAPA 2: TELA OBRIGATÓRIA DE REGRAS E CONDIÇÕES
+       ======================================================================= -->
   <section id="rules-screen" class="hidden">
-    <div class="env-surface rules-box">
-      <span class="bolt-corner bolt-tl"></span>
-      <span class="bolt-corner bolt-tr"></span>
-      <span class="bolt-corner bolt-bl"></span>
-      <span class="bolt-corner bolt-br"></span>
+    <div class="carbon-panel rules-box">
+      <span class="rivet-corner rivet-tl"></span>
+      <span class="rivet-corner rivet-tr"></span>
+      <span class="rivet-corner rivet-bl"></span>
+      <span class="rivet-corner rivet-br"></span>
 
       <div class="rules-header">
         <div class="brand-lockup">
           <div class="brand-icon-box">
-            <svg viewBox="0 0 64 64" width="42" height="42">
-              <path d="M 12 28 L 32 12 L 52 28" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round"/>
-              <rect x="28" y="21" width="8" height="8" rx="1" fill="#4ade80"/>
-              <circle cx="20" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
-              <circle cx="44" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
-              <path d="M 20 44 L 30 33 L 40 31 L 32 44 Z" fill="none" stroke="#e2e8f0" stroke-width="2.5"/>
+            <svg viewBox="0 0 64 64" width="40" height="40">
+              <path d="M 10 28 L 32 10 L 54 28" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="28" y="19" width="8" height="8" rx="1" fill="#4ade80"/>
+              <circle cx="18" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
+              <circle cx="46" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
+              <path d="M 18 44 L 27 33 L 39 33 L 29 44 Z" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="39" y1="33" x2="46" y2="44" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="27" y1="33" x2="25" y2="29" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="21" y1="29" x2="29" y2="29" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M 36 33 L 39 28 L 43 28" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <div>
             <div style="font-size:1.5rem; font-weight:900; line-height:1.1;">
-              <span style="color:#ffffff;">BikeIn'</span><span style="color:#4ade80;">House</span>
+              <span style="color:#ffffff;">BikeIn'</span><span class="neon-text">House</span>
             </div>
             <div style="font-size:0.85rem; color:#cbd5e1; font-weight:600; margin-top:2px;">
-              Vinicius Marquês • Regras e Condições de Atendimento
+              Vinicius Marquês • Porto Alegre • Regras e Condições
             </div>
           </div>
         </div>
 
-        <span class="pill-badge env-accent-bg env-accent-text">
+        <span class="pill-badge neon-pill">
           Taxa de Visita: R$ 75,00
         </span>
       </div>
@@ -1408,31 +1367,31 @@
       </h2>
 
       <div class="rules-list">
-        <div class="env-card rule-item">
+        <div class="carbon-card rule-item">
           <span class="rule-num">1</span>
           <p class="rule-text">
-            A taxa de visitas e montagem da oficina na sua residência (<strong>R$ 75,00</strong>) deve ser paga antecipadamente para o técnico dar a saída da base, taxa essa que está incluindo o deslocamento do equipamento e a montagem da oficina na sua residência.
+            A taxa antecipada de visita e montagem da oficina na sua residência (<strong>R$ 75,00</strong>) deve ser paga previamente para o técnico dar a saída da base, incluindo o deslocamento do equipamento e a montagem completa da oficina no local.
           </p>
         </div>
 
-        <div class="env-card rule-item">
+        <div class="carbon-card rule-item">
           <span class="rule-num">2</span>
           <p class="rule-text">
-            Atendimentos presenciais devem ser acionados com antecedência para segunda a sexta das 7h às 22h com disponibilidade de horário e confirmação por WhatsApp após concluir todas as etapas de cadastro e ter feito o pagamento das taxas de visita.
+            Atendimentos presenciais ocorrem de <strong>segunda a sexta das 7h às 22h</strong>, mediante agendamento antecipado, disponibilidade de horário e confirmação por WhatsApp após concluir o cadastro e o pagamento da taxa de visita.
           </p>
         </div>
 
-        <div class="env-card rule-item">
+        <div class="carbon-card rule-item">
           <span class="rule-num">3</span>
           <p class="rule-text">
-            Atendimento virtual a qualquer dia, horário ou momento do dia/noite para fins de agendamento ou compra na loja do aplicativo.
+            Atendimento virtual disponível <strong>24/7</strong> (qualquer dia e horário) para organização do agendamento e consulta de serviços.
           </p>
         </div>
 
-        <div class="env-card rule-item">
+        <div class="carbon-card rule-item">
           <span class="rule-num">4</span>
           <p class="rule-text">
-            Para atendimento domiciliar, agendar com antecedência e confirmar disponibilidade para o horário escolhido.
+            Para atendimento domiciliar em Porto Alegre e região, realize o agendamento com antecedência e confirme o horário escolhido diretamente com Vinicius Marquês via WhatsApp.
           </p>
         </div>
       </div>
@@ -1444,7 +1403,7 @@
         </span>
       </label>
 
-      <button id="btn-accept-rules" type="button" class="env-btn" style="width:100%; padding:16px 24px; font-size:1rem; text-transform:uppercase; letter-spacing:0.03em;">
+      <button id="btn-accept-rules" type="button" class="neon-btn" style="width:100%; padding:16px 24px; font-size:1rem; text-transform:uppercase; letter-spacing:0.03em;">
         <span>ENTRAR NA RECEPÇÃO DA OFICINA</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1453,7 +1412,9 @@
     </div>
   </section>
 
-  <!-- ETAPA 3: RECEPÇÃO DA OFICINA + 6 BOTÕES LADO A LADO ABAIXO DO NOME -->
+  <!-- =======================================================================
+       ETAPA 3: RECEPÇÃO DA OFICINA + 6 BOTÕES LADO A LADO
+       ======================================================================= -->
   <main id="workshop-screen" class="hidden">
 
     <header class="sticky-header">
@@ -1461,28 +1422,32 @@
         <div class="header-top-row">
           <div class="brand-lockup">
             <div class="brand-icon-box" style="width:44px; height:44px;">
-              <svg viewBox="0 0 64 64" width="34" height="34">
-                <path d="M 12 28 L 32 12 L 52 28" fill="none" stroke="currentColor" class="env-accent-text" stroke-width="3.5" stroke-linecap="round"/>
-                <rect x="28" y="21" width="8" height="8" rx="1" fill="currentColor" class="env-accent-text"/>
-                <circle cx="20" cy="44" r="8" fill="none" stroke="currentColor" class="env-accent-text" stroke-width="3"/>
-                <circle cx="44" cy="44" r="8" fill="none" stroke="currentColor" class="env-accent-text" stroke-width="3"/>
-                <path d="M 20 44 L 30 33 L 40 31 L 32 44 Z" fill="none" stroke="#ffffff" stroke-width="2.5"/>
-              </svg>
-            </div>
-            <div>
-              <div style="font-size:1.3rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em;">
-                <span style="color:#ffffff;">BikeIn'</span><span class="env-accent-text">House</span>
-                <span style="color:#e2e8f0; font-weight:700; font-size:0.95rem;"> • Vinicius Marquês</span>
+            <svg viewBox="0 0 64 64" width="34" height="34">
+              <path d="M 10 28 L 32 10 L 54 28" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="28" y="19" width="8" height="8" rx="1" fill="#4ade80"/>
+              <circle cx="18" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
+              <circle cx="46" cy="44" r="8" fill="none" stroke="#4ade80" stroke-width="3"/>
+              <path d="M 18 44 L 27 33 L 39 33 L 29 44 Z" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="39" y1="33" x2="46" y2="44" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="27" y1="33" x2="25" y2="29" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="21" y1="29" x2="29" y2="29" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M 36 33 L 39 28 L 43 28" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+              <div style="font-size:1.28rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em;">
+                <span style="color:#ffffff;">BikeIn'</span><span class="neon-text">House</span>
+                <span style="color:#e2e8f0; font-weight:700; font-size:0.92rem;"> • Vinicius Marquês</span>
               </div>
               <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">
-                Oficina Móvel Domiciliar
+                Oficina Móvel de Bicicletas e E-Bikes • Porto Alegre
               </div>
             </div>
           </div>
 
           <div class="header-actions">
-            <span id="env-badge-label" class="pill-badge env-accent-bg env-accent-text">
-              Oficina Mecânica
+            <span id="env-badge-label" class="pill-badge neon-pill">
+              Carbono & Néon • DH/E-Bike
             </span>
             <button id="btn-show-rules" type="button" class="ghost-btn">
               Regras
@@ -1493,95 +1458,95 @@
         <nav id="nav-grid" aria-label="Etapas do Atendimento">
           <button type="button" data-step="1" class="nav-box-btn active">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">01</span>
+              <span class="neon-text">01</span>
               <span id="badge-step-1" class="led-indicator"><span class="led-dot led-amber"></span></span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <rect x="10" y="8" width="44" height="48" rx="6"/>
               <circle cx="32" cy="23" r="7"/>
               <path d="M19 43c2.5-6 23.5-6 26 0" stroke-linecap="round"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Cadastro</span>
-              <span class="label-desktop">1. Cadastro</span>
+              <span class="label-mobile">01 Cadastro</span>
+              <span class="label-desktop">01 Cadastro</span>
             </span>
           </button>
 
           <button type="button" data-step="2" class="nav-box-btn locked">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">02</span>
+              <span class="neon-text">02</span>
               <span id="badge-step-2" class="led-indicator">🔒</span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <rect x="8" y="14" width="34" height="36" rx="5"/>
               <line x1="8" y1="24" x2="42" y2="24"/>
-              <circle cx="46" cy="44" r="11" fill="#121714"/>
+              <circle cx="46" cy="44" r="11" fill="#0d120f"/>
               <path d="M46 39v5l3 2" stroke-linecap="round"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Local</span>
-              <span class="label-desktop">2. Local e Hora</span>
+              <span class="label-mobile">02 Local e Hora</span>
+              <span class="label-desktop">02 Local e Hora</span>
             </span>
           </button>
 
           <button type="button" data-step="3" class="nav-box-btn locked">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">03</span>
+              <span class="neon-text">03</span>
               <span id="badge-step-3" class="led-indicator">🔒</span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <circle cx="26" cy="36" r="13"/>
               <circle cx="26" cy="36" r="5"/>
-              <path d="M42 12c-4 1-6 5-5 9L24 34l4 4 13-13c4 1 8-1 9-5l-5 2-3-3 2-5z" fill="#121714"/>
+              <path d="M42 12c-4 1-6 5-5 9L24 34l4 4 13-13c4 1 8-1 9-5l-5 2-3-3 2-5z" fill="#0d120f"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Serviços</span>
-              <span class="label-desktop">3. 20 Serviços</span>
+              <span class="label-mobile">03 20 Serviços</span>
+              <span class="label-desktop">03 20 Serviços</span>
             </span>
           </button>
 
           <button type="button" data-step="4" class="nav-box-btn locked">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">04</span>
+              <span class="neon-text">04</span>
               <span id="badge-step-4" class="led-indicator">🔒</span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <rect x="14" y="12" width="36" height="44" rx="5"/>
               <path d="M21 26l3 3 6-6M21 37l3 3 6-6M34 27h9M34 38h9" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Resumo</span>
-              <span class="label-desktop">4. Resumo</span>
+              <span class="label-mobile">04 Resumo</span>
+              <span class="label-desktop">04 Resumo</span>
             </span>
           </button>
 
           <button type="button" data-step="5" class="nav-box-btn locked">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">05</span>
+              <span class="neon-text">05</span>
               <span id="badge-step-5" class="led-indicator">🔒</span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M32 10L52 30 32 50 12 30 32 10z" stroke-linejoin="round"/>
               <path d="M22 24l10 10 10-10M22 36l10-10 10 10" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Pix</span>
-              <span class="label-desktop">5. Pagamento Pix</span>
+              <span class="label-mobile">05 Pagamento Pix</span>
+              <span class="label-desktop">05 Pagamento Pix</span>
             </span>
           </button>
 
           <button type="button" data-step="6" class="nav-box-btn locked">
             <div class="nav-btn-meta">
-              <span class="env-accent-text">06</span>
+              <span class="neon-text">06</span>
               <span id="badge-step-6" class="led-indicator">🔒</span>
             </div>
-            <svg viewBox="0 0 64 64" class="nav-btn-icon env-accent-text" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg viewBox="0 0 64 64" class="nav-btn-icon neon-text" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M32 10c-12.15 0-22 9.4-22 21 0 4.3 1.35 8.3 3.68 11.64L10 54l11.88-3.42A22.6 22.6 0 0032 52c12.15 0 22-9.4 22-21s-9.85-21-22-21z" stroke-linejoin="round"/>
               <path d="M24 32h16M33 25l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="nav-btn-label">
-              <span class="label-mobile">Enviar</span>
-              <span class="label-desktop">6. WhatsApp</span>
+              <span class="label-mobile">06 WhatsApp</span>
+              <span class="label-desktop">06 WhatsApp</span>
             </span>
           </button>
         </nav>
@@ -1590,60 +1555,60 @@
 
     <div class="container main-stack">
 
-      <div class="env-surface showcase-grid">
+      <!-- VITRINE DE E-BIKES & DOWNHILL -->
+      <div class="carbon-panel showcase-grid">
         <div class="featured-photo-box">
           <img id="env-featured-photo"
-               src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=1200&q=85"
-               alt="Bicicleta em Destaque"
+               src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1200&q=85"
+               alt="Downhill e E-Bike em Destaque"
                onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                class="bike-photo-live" />
         </div>
 
         <div class="showcase-body">
           <div>
-            <span class="panel-kicker env-accent-text">Recepção da Oficina Móvel</span>
             <h2 style="margin:4px 0 6px 0; font-size:1.3rem; font-weight:900; color:#ffffff;">
-              Bem-vindo à <span style="color:#ffffff;">BikeIn'</span><span class="env-accent-text">House</span>!
+              Bem vindo a <span style="color:#ffffff;">BikeIn'</span><span class="neon-text">House</span>, aguardamos a sua confirmação.
             </h2>
             <p id="reception-hint" style="margin:0; font-size:0.875rem; color:#e2e8f0;">
-              Etapa 01 obrigatória: preencha e salve seus dados pessoais e o modelo da sua bicicleta ou e-bike para liberar os próximos ambientes.
+              Etapa 01 obrigatória: preencha e salve seus dados pessoais e o modelo da sua bicicleta ou e-bike para liberar os demais botões.
             </p>
           </div>
 
           <div class="bike-thumbs-grid">
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 1">
-              <img src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 1"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto Downhill 1">
+              <img src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=600&q=80"
+                   alt="Downhill Trilha"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" />
             </button>
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 2">
-              <img src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 2"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto E-Bike 1">
+              <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=600&q=80"
+                   alt="E-Bike Elétrica"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" style="animation-delay: -1.5s;" />
             </button>
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 3">
-              <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 3"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto MTB Full Suspension">
+              <img src="https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=600&q=80"
+                   alt="MTB Suspensão Total"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" style="animation-delay: -3s;" />
             </button>
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 4">
-              <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 4"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto E-Bike Adventure">
+              <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=600&q=80"
+                   alt="E-Bike Aventura"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" style="animation-delay: -4.5s;" />
             </button>
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 5">
-              <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 5"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto Bike Off-Road">
+              <img src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&w=600&q=80"
+                   alt="Bike Off-Road"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" style="animation-delay: -6s;" />
             </button>
-            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto de Bicicleta 6">
-              <img src="https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=600&q=80"
-                   alt="Bicicleta 6"
+            <button type="button" data-bike-photo="https://images.unsplash.com/photo-1559348349-86f1f65817fe?auto=format&fit=crop&w=1400&q=85" class="bike-thumb-btn" aria-label="Foto Enduro MTB">
+              <img src="https://images.unsplash.com/photo-1559348349-86f1f65817fe?auto=format&fit=crop&w=600&q=80"
+                   alt="Enduro MTB"
                    onerror="this.onerror=null; this.src=FALLBACK_BIKE_SVG;"
                    class="bike-photo-live" style="animation-delay: -7.5s;" />
             </button>
@@ -1652,7 +1617,7 @@
           <div class="progress-box">
             <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700;">
               <span style="color:#e2e8f0;">Progresso do Atendimento</span>
-              <span id="progress-percent" class="env-accent-text" style="font-family:var(--font-mono);">0%</span>
+              <span id="progress-percent" class="neon-text" style="font-family:var(--font-mono);">0%</span>
             </div>
             <div class="progress-track">
               <div id="progress-bar"></div>
@@ -1661,55 +1626,55 @@
         </div>
       </div>
 
-      <!-- PAINEL 1: CADASTRO OBRIGATÓRIO -->
-      <section id="panel-1" class="env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 01: CADASTRO OBRIGATÓRIO -->
+      <section id="panel-1" class="carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 01 • Cadastro Obrigatório</span>
-            <h3 class="panel-title">Dados Pessoais & Modelo da Bicicleta / E-Bike</h3>
+            <span class="panel-kicker neon-text">01 Cadastro • Dados Obrigatórios</span>
+            <h3 class="panel-title">Nome, Celular, Endereço & Modelo da Bicicleta / E-Bike</h3>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text">Obrigatório para Avançar</span>
+          <span class="pill-badge neon-pill">Obrigatório para Avançar</span>
         </div>
 
         <form id="form-personal" class="form-grid-2" novalidate>
           <div>
             <label for="input-name" class="field-label">
-              Nome Completo <span style="color:#f87171;">*</span>
+              Nome Completo <span style="color:#4ade80;">*</span>
             </label>
-            <input id="input-name" type="text" required placeholder="Ex: Carlos Eduardo Silva" class="field-input" />
+            <input id="input-name" type="text" required placeholder="Ex: Rafael Almeida" class="field-input" />
           </div>
 
           <div>
             <label for="input-phone" class="field-label">
-              Celular / WhatsApp <span style="color:#f87171;">*</span>
+              Celular / WhatsApp <span style="color:#4ade80;">*</span>
             </label>
             <input id="input-phone" type="tel" required placeholder="Ex: (51) 99999-8888" class="field-input" />
           </div>
 
           <div class="span-2">
             <label for="input-address" class="field-label">
-              Endereço Completo (Rua, Número, Bairro, Complemento e Cidade) <span style="color:#f87171;">*</span>
+              Endereço Completo em Porto Alegre (Rua, Número, Bairro e Complemento) <span style="color:#4ade80;">*</span>
             </label>
-            <input id="input-address" type="text" required placeholder="Ex: Rua das Trilhas, 450 - Apto 202 - Porto Alegre" class="field-input" />
+            <input id="input-address" type="text" required placeholder="Ex: Av. Carlos Gomes, 1200 - Bela Vista - Porto Alegre" class="field-input" />
           </div>
 
           <div class="span-2">
             <label for="input-bike" class="field-label">
-              Modelo da Bicicleta ou E-Bike (Marca, Modelo, Aro e Tipo) <span style="color:#f87171;">*</span>
+              Modelo da Bicicleta ou E-Bike (Marca, Modelo, Aro e Categoria DH / E-Bike) <span style="color:#4ade80;">*</span>
             </label>
-            <input id="input-bike" type="text" required placeholder="Ex: Caloi Elite Carbon Aro 29 / E-Bike Oggi Big Wheel 8.3" class="field-input" />
+            <input id="input-bike" type="text" required placeholder="Ex: E-Bike Specialized Turbo Levo / Downhill Commencal DH Aro 29" class="field-input" />
           </div>
 
           <div class="span-2 panel-footer-row">
             <span style="font-size:0.8rem; color:#cbd5e1;">
-              * Salve seus dados pessoais para desbloquear as próximas etapas acima.
+              * Salve seus dados para desbloquear as etapas 02 a 06.
             </span>
-            <button type="submit" class="env-btn" style="padding:15px 28px; font-size:0.95rem; text-transform:uppercase;">
+            <button type="submit" class="neon-btn" style="padding:15px 28px; font-size:0.95rem; text-transform:uppercase;">
               <span>SALVAR DADOS E AVANÇAR</span>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1719,31 +1684,31 @@
         </form>
       </section>
 
-      <!-- PAINEL 2: LOCAL E HORÁRIO -->
-      <section id="panel-2" class="hidden env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 02: LOCAL E HORA -->
+      <section id="panel-2" class="hidden carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 02 • Garagem & Residência</span>
-            <h3 class="panel-title">Dia, Horário e Condições do Local de Montagem</h3>
+            <span class="panel-kicker neon-text">02 Local e Hora • Montagem Domiciliar</span>
+            <h3 class="panel-title">Dia, Horário (07h–22h) e Estrutura do Local</h3>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text">Seg a Sex • 07:00 às 22:00</span>
+          <span class="pill-badge neon-pill">Seg a Sex • 07:00 às 22:00</span>
         </div>
 
         <div class="form-grid-2" style="margin-bottom:24px;">
-          <div class="env-card" style="padding:18px;">
-            <label for="input-date" class="field-label">Data do Atendimento</label>
+          <div class="carbon-card" style="padding:18px;">
+            <label for="input-date" class="field-label">Data do Atendimento Presencial</label>
             <input id="input-date" type="date" class="field-input" />
-            <p style="margin:8px 0 0 0; font-size:0.78rem; color:#fde68a;">
-              Atendimento presencial de Segunda a Sexta-feira com confirmação via WhatsApp.
+            <p style="margin:8px 0 0 0; font-size:0.78rem; color:#86efac;">
+              Atendimento presencial de segunda a sexta das 7h às 22h com confirmação via WhatsApp.
             </p>
           </div>
 
-          <div class="env-card" style="padding:18px;">
+          <div class="carbon-card" style="padding:18px;">
             <label for="input-time" class="field-label">Horário Preferencial (07:00 às 22:00)</label>
             <input id="input-time" type="time" min="07:00" max="22:00" value="09:00" class="field-input" />
             <div class="preset-times-row">
@@ -1757,46 +1722,46 @@
         </div>
 
         <h4 style="margin:0 0 4px 0; font-size:1rem; font-weight:800; color:#ffffff;">
-          Marque as condições disponíveis no local da sua residência:
+          Marque as condições disponíveis no local onde a oficina será montada:
         </h4>
         <p style="margin:0 0 14px 0; font-size:0.82rem; color:#cbd5e1;">
-          Selecione todas as opções que descrevem o espaço onde a oficina portátil será montada:
+          Selecione todas as opções aplicáveis ao espaço da sua residência:
         </p>
 
         <div class="local-checks-grid">
-          <label class="env-card check-card-label">
+          <label class="carbon-card check-card-label">
             <input type="checkbox" value="Garagem" class="local-check" />
             <div>
               <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Garagem</div>
-              <div style="font-size:0.78rem; color:#cbd5e1;">Área de estacionamento / box</div>
+              <div style="font-size:0.78rem; color:#cbd5e1;">Área de garagem ou box residencial</div>
             </div>
           </label>
 
-          <label class="env-card check-card-label">
+          <label class="carbon-card check-card-label">
             <input type="checkbox" value="Apartamento" class="local-check" />
             <div>
               <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Apartamento</div>
-              <div style="font-size:0.78rem; color:#cbd5e1;">Condomínio / área comum autorizada</div>
+              <div style="font-size:0.78rem; color:#cbd5e1;">Sacada ampla ou área do condomínio</div>
             </div>
           </label>
 
-          <label class="env-card check-card-label">
-            <input type="checkbox" value="Espaço com capacidade de montagem para a oficina portátil" class="local-check" />
+          <label class="carbon-card check-card-label">
+            <input type="checkbox" value="Espaço para oficina portátil" class="local-check" />
             <div>
-              <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Capacidade para oficina portátil</div>
-              <div style="font-size:0.78rem; color:#cbd5e1;">Espaço livre para cavalete e bancada</div>
+              <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Espaço para oficina portátil</div>
+              <div style="font-size:0.78rem; color:#cbd5e1;">Área livre para cavalete e bancada</div>
             </div>
           </label>
 
-          <label class="env-card check-card-label">
+          <label class="carbon-card check-card-label">
             <input type="checkbox" value="Iluminação adequada" class="local-check" />
             <div>
               <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Iluminação adequada</div>
-              <div style="font-size:0.78rem; color:#cbd5e1;">Boa visibilidade para ajustes técnicos</div>
+              <div style="font-size:0.78rem; color:#cbd5e1;">Boa claridade para regulagens finas</div>
             </div>
           </label>
 
-          <label class="env-card check-card-label">
+          <label class="carbon-card check-card-label">
             <input type="checkbox" value="Sombra / abrigo em dias de chuva" class="local-check" />
             <div>
               <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Sombra / abrigo em dias de chuva</div>
@@ -1804,18 +1769,18 @@
             </div>
           </label>
 
-          <label class="env-card check-card-label">
+          <label class="carbon-card check-card-label">
             <input type="checkbox" value="Proteção em dias de sol" class="local-check" />
             <div>
               <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Proteção em dias de sol</div>
-              <div style="font-size:0.78rem; color:#cbd5e1;">Área abrigada da incidência solar direta</div>
+              <div style="font-size:0.78rem; color:#cbd5e1;">Área abrigada do sol forte direto</div>
             </div>
           </label>
         </div>
 
         <div class="panel-footer-row" style="justify-content:flex-end;">
-          <button type="button" data-goto="3" class="env-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
-            <span>AVANÇAR PARA OS 20 SERVIÇOS</span>
+          <button type="button" data-goto="3" class="neon-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
+            <span>AVANÇAR PARA 03 20 SERVIÇOS</span>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -1823,35 +1788,35 @@
         </div>
       </section>
 
-      <!-- PAINEL 3: 20 SERVIÇOS -->
-      <section id="panel-3" class="hidden env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 03: 20 SERVIÇOS -->
+      <section id="panel-3" class="hidden carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 03 • Manutenção Especializada</span>
-            <h3 class="panel-title">Catálogo Técnico — Selecione os Serviços</h3>
+            <span class="panel-kicker neon-text">03 20 Serviços • Catálogo Pesquisável</span>
+            <h3 class="panel-title">Selecione os Serviços Técnicos de Bicicleta / E-Bike</h3>
           </div>
-          <span id="services-counter" class="pill-badge env-accent-bg env-accent-text" style="font-family:var(--font-mono);">
+          <span id="services-counter" class="pill-badge neon-pill" style="font-family:var(--font-mono);">
             0 de 20 selecionados
           </span>
         </div>
 
         <div style="margin-bottom:16px;">
-          <input id="service-search" type="text" placeholder="Pesquisar serviço (ex: freio, revisão, corrente, suspensão, sangria...)" class="field-input" />
+          <input id="service-search" type="text" placeholder="Pesquisar serviço (ex: freio, câmbio, corrente, suspensão, sangria, cubos...)" class="field-input" />
         </div>
 
         <div id="services-list"></div>
 
         <div class="panel-footer-row">
           <span style="font-size:0.82rem; color:#cbd5e1;">
-            Marque todas as caixas dos serviços que deseja realizar na sua bike.
+            Marque os serviços desejados para incluir no resumo e na mensagem do WhatsApp.
           </span>
-          <button type="button" data-goto="4" class="env-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
-            <span>VER RESUMO DO PEDIDO</span>
+          <button type="button" data-goto="4" class="neon-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
+            <span>VER 04 RESUMO</span>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -1859,19 +1824,19 @@
         </div>
       </section>
 
-      <!-- PAINEL 4: RESUMO -->
-      <section id="panel-4" class="hidden env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 04: RESUMO -->
+      <section id="panel-4" class="hidden carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 04 • Conferência Técnica</span>
-            <h3 class="panel-title">Resumo Completo do Atendimento</h3>
+            <span class="panel-kicker neon-text">04 Resumo • Conferência Técnica</span>
+            <h3 class="panel-title">Resumo Completo do Agendamento</h3>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text">Taxa de Visita: R$ 75,00</span>
+          <span class="pill-badge neon-pill">Taxa de Visita: R$ 75,00</span>
         </div>
 
         <div id="order-summary-content" class="summary-stack"></div>
@@ -1880,8 +1845,8 @@
           <button type="button" data-goto="3" class="ghost-btn" style="padding:12px 18px;">
             ← Alterar Serviços
           </button>
-          <button type="button" data-goto="5" class="env-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
-            <span>IR PARA PAGAMENTO PIX</span>
+          <button type="button" data-goto="5" class="neon-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
+            <span>IR PARA 05 PAGAMENTO PIX</span>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -1889,32 +1854,32 @@
         </div>
       </section>
 
-      <!-- PAINEL 5: PAGAMENTO PIX -->
-      <section id="panel-5" class="hidden env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 05: PAGAMENTO PIX -->
+      <section id="panel-5" class="hidden carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 05 • Pagamento Antecipado da Visita</span>
-            <h3 class="panel-title">Pagamento via Pix — Taxa de Visita e Montagem</h3>
+            <span class="panel-kicker neon-text">05 Pagamento Pix • Taxa Antecipada</span>
+            <h3 class="panel-title">Pagamento via Pix — Deslocamento & Montagem</h3>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text">Valor: R$ 75,00</span>
+          <span class="pill-badge neon-pill">Valor: R$ 75,00</span>
         </div>
 
         <div class="pix-grid">
-          <div class="env-card" style="padding:22px; display:flex; flex-direction:column; gap:14px;">
+          <div class="carbon-card" style="padding:22px; display:flex; flex-direction:column; gap:14px;">
             <div style="display:flex; align-items:center; gap:12px;">
-              <div style="width:48px; height:48px; border-radius:12px; background:rgba(2,132,199,0.22); border:1.5px solid #38bdf8; display:flex; align-items:center; justify-content:center; color:#38bdf8; flex-shrink:0;">
+              <div style="width:48px; height:48px; border-radius:12px; background:rgba(34,197,94,0.18); border:1.5px solid #4ade80; display:flex; align-items:center; justify-content:center; color:#4ade80; flex-shrink:0;">
                 <svg viewBox="0 0 64 64" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3">
                   <path d="M32 10L52 30 32 50 12 30 32 10z"/>
                   <path d="M22 24l10 10 10-10M22 36l10-10 10 10"/>
                 </svg>
               </div>
               <div>
-                <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:#7dd3fc;">
+                <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:#86efac;">
                   Chave Pix (Celular)
                 </div>
                 <div style="font-family:var(--font-mono); font-size:1.5rem; font-weight:900; color:#ffffff; letter-spacing:0.04em;">
@@ -1923,18 +1888,18 @@
               </div>
             </div>
 
-            <div style="padding:14px; border-radius:12px; background:rgba(8,11,9,0.72); border:1px solid rgba(56,189,248,0.32); display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;">
+            <div style="padding:14px; border-radius:12px; background:rgba(7,10,8,0.78); border:1px solid rgba(74,222,128,0.34); display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;">
               <div>
                 <div style="font-size:0.75rem; color:#cbd5e1;">Favorecido:</div>
-                <div style="font-size:1.05rem; font-weight:900; color:#7dd3fc;">Vinicius Marquês</div>
+                <div style="font-size:1.05rem; font-weight:900; color:#4ade80;">Vinicius Marquês</div>
               </div>
               <div>
-                <div style="font-size:0.75rem; color:#cbd5e1;">Taxa Antecipada:</div>
+                <div style="font-size:0.75rem; color:#cbd5e1;">Taxa de Visita e Montagem:</div>
                 <div style="font-family:var(--font-mono); font-size:1.05rem; font-weight:900; color:#4ade80;">R$ 75,00</div>
               </div>
             </div>
 
-            <button id="btn-copy-pix" type="button" class="env-btn" style="width:100%; padding:14px 20px; font-size:0.9rem; text-transform:uppercase;">
+            <button id="btn-copy-pix" type="button" class="neon-btn" style="width:100%; padding:14px 20px; font-size:0.9rem; text-transform:uppercase;">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                 <rect x="9" y="9" width="13" height="13" rx="2"/>
                 <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
@@ -1943,41 +1908,41 @@
             </button>
 
             <div class="pix-warning-box">
-              <strong style="color:#fcd34d; display:block; margin-bottom:4px;">⚠️ AVISO OBRIGATÓRIO:</strong>
-              Após realizar o Pix de <strong>R$ 75,00</strong>, lembre-se de <strong>enviar o comprovante via WhatsApp</strong> na conversa que será aberta na próxima etapa para confirmar seu horário e liberar a saída do técnico da base!
+              <strong style="color:#4ade80; display:block; margin-bottom:4px;">⚠️ AVISO DE COMPROVANTE:</strong>
+              Após transferir <strong>R$ 75,00</strong> pela chave Pix <strong>51995556632</strong> para <strong>Vinicius Marquês</strong>, envie o <strong>comprovante via WhatsApp</strong> na próxima etapa para confirmar o horário e liberar a saída da oficina móvel.
             </div>
           </div>
 
-          <div class="env-card" style="padding:22px; text-align:center;">
+          <div class="carbon-card" style="padding:22px; text-align:center;">
             <div class="qr-box">
               <svg viewBox="0 0 120 120" width="100%" height="100%">
                 <rect width="120" height="120" fill="#ffffff"/>
-                <rect x="10" y="10" width="30" height="30" fill="none" stroke="#111827" stroke-width="6"/>
-                <rect x="18" y="18" width="14" height="14" fill="#111827"/>
-                <rect x="80" y="10" width="30" height="30" fill="none" stroke="#111827" stroke-width="6"/>
-                <rect x="88" y="18" width="14" height="14" fill="#111827"/>
-                <rect x="10" y="80" width="30" height="30" fill="none" stroke="#111827" stroke-width="6"/>
-                <rect x="18" y="88" width="14" height="14" fill="#111827"/>
-                <path d="M52 14h16v16H52zM52 46h16v28H52zM14 52h28v16H14zM78 52h28v16H78zM52 86h16v20H52zM82 82h24v24H82z" fill="#111827"/>
-                <rect x="46" y="46" width="28" height="28" rx="6" fill="#0369a1"/>
+                <rect x="10" y="10" width="30" height="30" fill="none" stroke="#090c0a" stroke-width="6"/>
+                <rect x="18" y="18" width="14" height="14" fill="#090c0a"/>
+                <rect x="80" y="10" width="30" height="30" fill="none" stroke="#090c0a" stroke-width="6"/>
+                <rect x="88" y="18" width="14" height="14" fill="#090c0a"/>
+                <rect x="10" y="80" width="30" height="30" fill="none" stroke="#090c0a" stroke-width="6"/>
+                <rect x="18" y="88" width="14" height="14" fill="#090c0a"/>
+                <path d="M52 14h16v16H52zM52 46h16v28H52zM14 52h28v16H14zM78 52h28v16H78zM52 86h16v20H52zM82 82h24v24H82z" fill="#090c0a"/>
+                <rect x="46" y="46" width="28" height="28" rx="6" fill="#15803d"/>
                 <path d="M60 51l9 9-9 9-9-9 9-9z" fill="#ffffff"/>
               </svg>
             </div>
             <p style="margin:0 0 14px 0; font-size:0.82rem; color:#e2e8f0;">
-              Copie a chave Pix <strong>51995556632</strong> no aplicativo do seu banco e conclua o envio do pedido.
+              Copie a chave Pix <strong>51995556632</strong> (Vinicius Marquês) no app do seu banco e siga para o envio no WhatsApp.
             </p>
-            <label for="pix-confirmed-check" class="check-card-label" style="background:rgba(8,11,9,0.68); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; text-align:left;">
+            <label for="pix-confirmed-check" class="check-card-label" style="background:rgba(7,10,8,0.72); border:1px solid rgba(74,222,128,0.25); border-radius:10px; padding:12px; text-align:left;">
               <input id="pix-confirmed-check" type="checkbox" />
-              <span style="font-size:0.82rem; font-weight:700; color:#bae6fd;">
-                Ciente do pagamento Pix (R$ 75,00) e envio do comprovante no WhatsApp
+              <span style="font-size:0.82rem; font-weight:700; color:#dcfce7;">
+                Confirmo ciência do Pix de R$ 75,00 e envio do comprovante no WhatsApp
               </span>
             </label>
           </div>
         </div>
 
         <div class="panel-footer-row" style="justify-content:flex-end;">
-          <button type="button" data-goto="6" class="env-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
-            <span>AVANÇAR PARA ENVIO NO WHATSAPP</span>
+          <button type="button" data-goto="6" class="neon-btn" style="padding:14px 26px; font-size:0.92rem; text-transform:uppercase;">
+            <span>AVANÇAR PARA 06 WHATSAPP</span>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -1985,30 +1950,30 @@
         </div>
       </section>
 
-      <!-- PAINEL 6: BOTÃO FINAL WHATSAPP -->
-      <section id="panel-6" class="hidden env-surface stage-panel">
-        <span class="bolt-corner bolt-tl"></span>
-        <span class="bolt-corner bolt-tr"></span>
-        <span class="bolt-corner bolt-bl"></span>
-        <span class="bolt-corner bolt-br"></span>
+      <!-- PAINEL 06: WHATSAPP -->
+      <section id="panel-6" class="hidden carbon-panel stage-panel">
+        <span class="rivet-corner rivet-tl"></span>
+        <span class="rivet-corner rivet-tr"></span>
+        <span class="rivet-corner rivet-bl"></span>
+        <span class="rivet-corner rivet-br"></span>
 
         <div class="panel-header">
           <div>
-            <span class="panel-kicker env-accent-text">Etapa 06 • Envio Direto ao Técnico</span>
+            <span class="panel-kicker neon-text">06 WhatsApp • Confirmação Direta</span>
             <h3 class="panel-title">Enviar Pedido Detalhado no WhatsApp</h3>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text" style="font-family:var(--font-mono);">Destino: +55 51 99555-6632</span>
+          <span class="pill-badge neon-pill" style="font-family:var(--font-mono);">Destino: +55 51 99555-6632</span>
         </div>
 
-        <div class="env-card" style="padding:18px; margin-bottom:22px;">
+        <div class="carbon-card" style="padding:18px; margin-bottom:22px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span class="panel-kicker env-accent-text">Prévia da Mensagem Instantânea:</span>
-            <span style="font-size:0.75rem; color:#cbd5e1;">Vinicius Marquês</span>
+            <span class="panel-kicker neon-text">Prévia da Mensagem:</span>
+            <span style="font-size:0.75rem; color:#cbd5e1;">Vinicius Marquês • Porto Alegre</span>
           </div>
           <pre id="whatsapp-preview" class="whatsapp-preview-pre"></pre>
         </div>
 
-        <button id="btn-send-whatsapp" type="button" class="env-btn" style="width:100%; padding:18px 24px; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.03em;">
+        <button id="btn-send-whatsapp" type="button" class="neon-btn" style="width:100%; padding:18px 24px; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.03em;">
           <svg width="25" height="25" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
           </svg>
@@ -2016,7 +1981,7 @@
         </button>
 
         <p style="margin:12px 0 0 0; text-align:center; font-size:0.8rem; color:#e2e8f0;">
-          Ao clicar, o navegador abrirá diretamente o WhatsApp da <strong>BikeIn'House</strong> com todo o seu pedido detalhado pronto para envio.
+          Abre o WhatsApp oficial de <strong>Vinicius Marquês</strong> (<strong>+55 51 99555-6632</strong>) com todos os detalhes do seu agendamento e lembrete do comprovante Pix.
         </p>
       </section>
 
@@ -2024,28 +1989,31 @@
   </main>
 
   <script>
+    /* =========================================================================
+       1. FALLBACK SVG (E-BIKES & DOWNHILL) E CATÁLOGO DE 20 SERVIÇOS
+       ========================================================================= */
     const FALLBACK_BIKE_SVG = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
       `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
         <defs>
           <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#141c18"/>
-            <stop offset="100%" stop-color="#090d0b"/>
+            <stop offset="0%" stop-color="#111613"/>
+            <stop offset="100%" stop-color="#090c0a"/>
           </linearGradient>
         </defs>
         <rect width="800" height="500" fill="url(#bg)"/>
-        <g stroke="#4ade80" stroke-width="5" fill="none" opacity="0.75">
-          <circle cx="270" cy="310" r="78"/>
-          <circle cx="530" cy="310" r="78"/>
-          <path d="M270 310 L365 215 L410 310 Z"/>
-          <path d="M365 215 L485 200 L410 310"/>
-          <line x1="478" y1="182" x2="530" y2="310" stroke="#cbd5e1"/>
-          <line x1="365" y1="215" x2="352" y2="178" stroke="#cbd5e1"/>
+        <g stroke="#4ade80" stroke-width="5" fill="none" opacity="0.8">
+          <circle cx="265" cy="315" r="82"/>
+          <circle cx="545" cy="315" r="82"/>
+          <path d="M265 315 L368 212 L418 315 Z"/>
+          <path d="M368 212 L495 194 L418 315"/>
+          <line x1="485" y1="170" x2="545" y2="315" stroke="#e2e8f0" stroke-width="6"/>
+          <rect x="364" y="240" width="52" height="20" rx="5" transform="rotate(-38 390 250)" fill="#15803d" stroke="#86efac" stroke-width="2"/>
         </g>
       </svg>`
     );
 
     const SERVICES_CATALOG = [
-      { id: 1, title: "Revisão geral", desc: "inspeção completa dos componentes da bicicleta." },
+      { id: 1, title: "Revisão geral", desc: "inspeção completa dos componentes da bicicleta ou e-bike." },
       { id: 2, title: "Regulagem de freios", desc: "ajuste da frenagem e dos manetes." },
       { id: 3, title: "Regulagem de câmbio", desc: "ajuste das marchas dianteiras e traseiras." },
       { id: 4, title: "Troca de corrente", desc: "substituição de corrente desgastada." },
@@ -2067,49 +2035,54 @@
       { id: 20, title: "Revisão de cubos e rolamentos", desc: "limpeza, lubrificação e ajuste dos rolamentos." }
     ];
 
+    /* =========================================================================
+       2. CENÁRIOS FOTOGRÁFICOS (E-BIKES & DOWNHILL)
+       ========================================================================= */
     const REALISTIC_SCENES = {
       1: {
-        badge: "Oficina Mecânica",
-        bgPhoto: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=1600&q=85",
-        cardPhoto: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=1200&q=85"
+        badge: "Carbono & Néon • DH / E-Bike",
+        bgPhoto: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1600&q=85",
+        cardPhoto: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1200&q=85"
       },
       2: {
-        badge: "Garagem & Pátio",
+        badge: "Local & Montagem • Porto Alegre",
         bgPhoto: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1600&q=85",
         cardPhoto: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1200&q=85"
       },
       3: {
-        badge: "Trilha Natural",
-        bgPhoto: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1600&q=85",
-        cardPhoto: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?auto=format&fit=crop&w=1200&q=85"
-      },
-      4: {
-        badge: "Estrada da Serra",
-        bgPhoto: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1600&q=85",
-        cardPhoto: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=85"
-      },
-      5: {
-        badge: "Vale do Rio",
-        bgPhoto: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=1600&q=85",
-        cardPhoto: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=1200&q=85"
-      },
-      6: {
-        badge: "Entrega em Casa",
+        badge: "20 Serviços • Oficina Móvel",
         bgPhoto: "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=85",
         cardPhoto: "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1200&q=85"
+      },
+      4: {
+        badge: "Resumo Técnico • BikeIn'House",
+        bgPhoto: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=1600&q=85",
+        cardPhoto: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=1200&q=85"
+      },
+      5: {
+        badge: "Pix • R$ 75,00 Antecipado",
+        bgPhoto: "https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&w=1600&q=85",
+        cardPhoto: "https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&w=1200&q=85"
+      },
+      6: {
+        badge: "WhatsApp • Vinicius Marquês",
+        bgPhoto: "https://images.unsplash.com/photo-1559348349-86f1f65817fe?auto=format&fit=crop&w=1600&q=85",
+        cardPhoto: "https://images.unsplash.com/photo-1559348349-86f1f65817fe?auto=format&fit=crop&w=1200&q=85"
       }
     };
 
+    /* =========================================================================
+       3. MOTOR DE ÁUDIO WEB AUDIO API — ACÚSTICA COM GAITA, ÁGUA, FOGO E AVES
+       ========================================================================= */
     class TrailSoundEngine {
       constructor() {
         this.ctx = null;
         this.masterGain = null;
-        this.forestReverb = null;
-        this.reverbReturn = null;
+        this.outdoorReverb = null;
         this.isRunning = false;
         this.currentTheme = 0;
         this.step = 0;
-        this.stepIntervalMs = 152;
+        this.stepIntervalMs = 158;
         this.timerId = null;
       }
 
@@ -2128,11 +2101,11 @@
             limiter.release.value = 0.25;
 
             this.masterGain = this.ctx.createGain();
-            this.masterGain.gain.value = 0.82;
+            this.masterGain.gain.value = 0.80;
             this.masterGain.connect(limiter);
             limiter.connect(this.ctx.destination);
 
-            this.buildOutdoorForestReverb();
+            this.buildOutdoorReverb();
           }
 
           if (this.ctx.state === 'suspended') {
@@ -2141,17 +2114,17 @@
           if (this.isRunning) return;
           this.isRunning = true;
 
-          this.startNaturalWaterAndBreeze();
+          this.startWaterAndBreeze();
           this.startCampfireAmbience();
-          this.startForestBirdsAndTrail();
-          this.startAcousticCampfireMusic();
+          this.startForestBirds();
+          this.startAcousticAdventureWithHarmonica();
         } catch (err) {}
       }
 
-      buildOutdoorForestReverb() {
+      buildOutdoorReverb() {
         try {
           const sampleRate = this.ctx.sampleRate;
-          const length = Math.floor(sampleRate * 2.5);
+          const length = Math.floor(sampleRate * 2.4);
           const impulse = this.ctx.createBuffer(2, length, sampleRate);
 
           for (let ch = 0; ch < 2; ch++) {
@@ -2162,23 +2135,23 @@
               const env = Math.pow(1 - t, 2.7);
               const white = Math.random() * 2 - 1;
               smooth = smooth * 0.72 + white * 0.28;
-              data[i] = smooth * env * 0.45;
+              data[i] = smooth * env * 0.42;
             }
           }
 
-          this.forestReverb = this.ctx.createConvolver();
-          this.forestReverb.buffer = impulse;
+          this.outdoorReverb = this.ctx.createConvolver();
+          this.outdoorReverb.buffer = impulse;
 
           const airFilter = this.ctx.createBiquadFilter();
           airFilter.type = 'lowpass';
-          airFilter.frequency.value = 2300;
+          airFilter.frequency.value = 2400;
 
-          this.reverbReturn = this.ctx.createGain();
-          this.reverbReturn.gain.value = 0.42;
+          const reverbReturn = this.ctx.createGain();
+          reverbReturn.gain.value = 0.40;
 
-          this.forestReverb.connect(airFilter);
-          airFilter.connect(this.reverbReturn);
-          this.reverbReturn.connect(this.masterGain);
+          this.outdoorReverb.connect(airFilter);
+          airFilter.connect(reverbReturn);
+          reverbReturn.connect(this.masterGain);
         } catch (err) {}
       }
 
@@ -2200,22 +2173,28 @@
         } catch (err) {}
       }
 
-      ringBikeBell() {
+      // Fallback suave de áudio / campainha de bicicleta
+      ringBikeBell(softOnly = false) {
         try {
           if (!this.ctx) this.initAndStart();
           if (!this.ctx) return;
           if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
 
           const now = this.ctx.currentTime;
-          const partials = [
-            { ratio: 1.0, amp: 0.22, decay: 0.85 },
-            { ratio: 2.01, amp: 0.12, decay: 0.55 },
-            { ratio: 2.76, amp: 0.08, decay: 0.38 },
-            { ratio: 4.18, amp: 0.04, decay: 0.20 }
-          ];
-          const baseFreq = 1840;
+          const partials = softOnly
+            ? [
+                { ratio: 1.0, amp: 0.09, decay: 0.75 },
+                { ratio: 1.5, amp: 0.04, decay: 0.55 }
+              ]
+            : [
+                { ratio: 1.0, amp: 0.20, decay: 0.85 },
+                { ratio: 2.01, amp: 0.11, decay: 0.55 },
+                { ratio: 2.76, amp: 0.07, decay: 0.36 }
+              ];
+          const baseFreq = softOnly ? 1320 : 1820;
 
-          [0, 0.14].forEach((offset) => {
+          const strikes = softOnly ? [0] : [0, 0.14];
+          strikes.forEach((offset) => {
             const t = now + offset;
             partials.forEach((p) => {
               const osc = this.ctx.createOscillator();
@@ -2224,12 +2203,12 @@
               osc.frequency.setValueAtTime(baseFreq * p.ratio, t);
 
               gain.gain.setValueAtTime(0.0005, t);
-              gain.gain.linearRampToValueAtTime(p.amp, t + 0.005);
+              gain.gain.linearRampToValueAtTime(p.amp, t + 0.006);
               gain.gain.exponentialRampToValueAtTime(0.0002, t + p.decay);
 
               osc.connect(gain);
               gain.connect(this.masterGain);
-              if (this.forestReverb) gain.connect(this.forestReverb);
+              if (this.outdoorReverb) gain.connect(this.outdoorReverb);
 
               osc.start(t);
               osc.stop(t + p.decay + 0.03);
@@ -2268,7 +2247,7 @@
         return { pinkBuf, brownBuf };
       }
 
-      startNaturalWaterAndBreeze() {
+      startWaterAndBreeze() {
         try {
           const { pinkBuf, brownBuf } = this.createNaturalNoiseBuffers(6);
 
@@ -2278,24 +2257,24 @@
 
           const streamFilter = this.ctx.createBiquadFilter();
           streamFilter.type = 'bandpass';
-          streamFilter.frequency.value = 540;
+          streamFilter.frequency.value = 560;
           streamFilter.Q.value = 0.55;
 
           const streamGain = this.ctx.createGain();
-          streamGain.gain.value = 0.16;
+          streamGain.gain.value = 0.15;
 
           const waterLfo = this.ctx.createOscillator();
           waterLfo.type = 'sine';
           waterLfo.frequency.value = 0.11;
           const waterLfoGain = this.ctx.createGain();
-          waterLfoGain.gain.value = 120;
+          waterLfoGain.gain.value = 115;
           waterLfo.connect(waterLfoGain);
           waterLfoGain.connect(streamFilter.frequency);
 
           streamPink.connect(streamFilter);
           streamFilter.connect(streamGain);
           streamGain.connect(this.masterGain);
-          if (this.forestReverb) streamGain.connect(this.forestReverb);
+          if (this.outdoorReverb) streamGain.connect(this.outdoorReverb);
 
           const waterfallLow = this.ctx.createBufferSource();
           waterfallLow.buffer = brownBuf;
@@ -2303,10 +2282,10 @@
 
           const lowWaterFilter = this.ctx.createBiquadFilter();
           lowWaterFilter.type = 'lowpass';
-          lowWaterFilter.frequency.value = 230;
+          lowWaterFilter.frequency.value = 220;
 
           const lowWaterGain = this.ctx.createGain();
-          lowWaterGain.gain.value = 0.18;
+          lowWaterGain.gain.value = 0.16;
 
           waterfallLow.connect(lowWaterFilter);
           lowWaterFilter.connect(lowWaterGain);
@@ -2322,25 +2301,20 @@
           breezeFilter.Q.value = 1.3;
 
           const breezeGain = this.ctx.createGain();
-          breezeGain.gain.value = 0.08;
+          breezeGain.gain.value = 0.075;
 
           const windLfo = this.ctx.createOscillator();
           windLfo.type = 'sine';
           windLfo.frequency.value = 0.07;
           const windFreqDepth = this.ctx.createGain();
-          windFreqDepth.gain.value = 135;
+          windFreqDepth.gain.value = 130;
           windLfo.connect(windFreqDepth);
           windFreqDepth.connect(breezeFilter.frequency);
-
-          const windVolDepth = this.ctx.createGain();
-          windVolDepth.gain.value = 0.04;
-          windLfo.connect(windVolDepth);
-          windVolDepth.connect(breezeGain.gain);
 
           breezeSrc.connect(breezeFilter);
           breezeFilter.connect(breezeGain);
           breezeGain.connect(this.masterGain);
-          if (this.forestReverb) breezeGain.connect(this.forestReverb);
+          if (this.outdoorReverb) breezeGain.connect(this.outdoorReverb);
 
           streamPink.start();
           waterfallLow.start();
@@ -2363,7 +2337,7 @@
           emberFilter.frequency.value = 135;
 
           const emberGain = this.ctx.createGain();
-          emberGain.gain.value = 0.14;
+          emberGain.gain.value = 0.13;
 
           emberSrc.connect(emberFilter);
           emberFilter.connect(emberGain);
@@ -2398,7 +2372,7 @@
                 bp.Q.value = 1.8;
 
                 const gain = this.ctx.createGain();
-                gain.gain.value = 0.08 + Math.random() * 0.10;
+                gain.gain.value = 0.075 + Math.random() * 0.09;
 
                 const pan = this.createPanner((Math.random() - 0.5) * 0.5);
 
@@ -2406,236 +2380,189 @@
                 bp.connect(gain);
                 gain.connect(pan);
                 pan.connect(this.masterGain);
-                if (this.forestReverb) pan.connect(this.forestReverb);
+                if (this.outdoorReverb) pan.connect(this.outdoorReverb);
 
                 src.start(t);
               }
             } catch (e) {}
 
-            setTimeout(triggerFirePop, 380 + Math.random() * 950);
+            setTimeout(triggerFirePop, 400 + Math.random() * 950);
           };
 
           setTimeout(triggerFirePop, 500);
         } catch (err) {}
       }
 
-      startForestBirdsAndTrail() {
+      startForestBirds() {
         const triggerBirdSong = () => {
           try {
             if (!this.isRunning || !this.ctx) return;
             const now = this.ctx.currentTime;
-            const panPos = (Math.random() * 1.5) - 0.75;
-            const pan = this.createPanner(panPos);
+            const pan = this.createPanner((Math.random() * 1.5) - 0.75);
             pan.connect(this.masterGain);
-            if (this.forestReverb) pan.connect(this.forestReverb);
+            if (this.outdoorReverb) pan.connect(this.outdoorReverb);
 
-            if (Math.random() > 0.35) {
-              const phrases = [
-                [
-                  { f1: 2150, f2: 2680, dur: 0.22, gap: 0.28 },
-                  { f1: 2540, f2: 1980, dur: 0.26, gap: 0.34 },
-                  { f1: 2320, f2: 2890, dur: 0.24, gap: 0.32 },
-                  { f1: 2620, f2: 2100, dur: 0.30, gap: 0.40 }
-                ],
-                [
-                  { f1: 1920, f2: 2450, dur: 0.20, gap: 0.26 },
-                  { f1: 2480, f2: 2780, dur: 0.18, gap: 0.24 },
-                  { f1: 2380, f2: 1840, dur: 0.32, gap: 0.40 }
-                ]
-              ];
-              const song = phrases[Math.floor(Math.random() * phrases.length)];
-              let cursor = now;
+            const phrases = [
+              [
+                { f1: 2150, f2: 2680, dur: 0.22, gap: 0.28 },
+                { f1: 2540, f2: 1980, dur: 0.26, gap: 0.34 },
+                { f1: 2320, f2: 2890, dur: 0.24, gap: 0.32 }
+              ],
+              [
+                { f1: 1920, f2: 2450, dur: 0.20, gap: 0.26 },
+                { f1: 2480, f2: 2780, dur: 0.18, gap: 0.24 },
+                { f1: 2380, f2: 1840, dur: 0.32, gap: 0.40 }
+              ]
+            ];
+            const song = phrases[Math.floor(Math.random() * phrases.length)];
+            let cursor = now;
 
-              song.forEach((syllable) => {
-                const osc = this.ctx.createOscillator();
-                const vib = this.ctx.createOscillator();
-                const vibGain = this.ctx.createGain();
-                const gain = this.ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(syllable.f1, cursor);
-                osc.frequency.exponentialRampToValueAtTime(syllable.f2, cursor + syllable.dur);
-
-                vib.type = 'sine';
-                vib.frequency.value = 7.5;
-                vibGain.gain.value = 18;
-                vib.connect(vibGain);
-                vibGain.connect(osc.frequency);
-
-                gain.gain.setValueAtTime(0.0005, cursor);
-                gain.gain.linearRampToValueAtTime(0.042, cursor + 0.03);
-                gain.gain.exponentialRampToValueAtTime(0.0004, cursor + syllable.dur);
-
-                osc.connect(gain);
-                gain.connect(pan);
-
-                osc.start(cursor);
-                vib.start(cursor);
-                osc.stop(cursor + syllable.dur + 0.02);
-                vib.stop(cursor + syllable.dur + 0.02);
-
-                cursor += syllable.gap;
-              });
-            } else {
-              const base = 2400 + Math.random() * 600;
-              for (let i = 0; i < 5; i++) {
-                const t = now + i * 0.085;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(base, t);
-                osc.frequency.exponentialRampToValueAtTime(base * 1.15, t + 0.04);
-                osc.frequency.exponentialRampToValueAtTime(base * 0.96, t + 0.075);
-
-                gain.gain.setValueAtTime(0.0005, t);
-                gain.gain.linearRampToValueAtTime(0.028, t + 0.015);
-                gain.gain.exponentialRampToValueAtTime(0.0004, t + 0.078);
-
-                osc.connect(gain);
-                gain.connect(pan);
-                osc.start(t);
-                osc.stop(t + 0.085);
-              }
-            }
-          } catch (e) {}
-
-          setTimeout(triggerBirdSong, 3200 + Math.random() * 4200);
-        };
-        setTimeout(triggerBirdSong, 1400);
-
-        const triggerTrailTireRoll = () => {
-          try {
-            if (!this.isRunning || !this.ctx) return;
-            const now = this.ctx.currentTime;
-            const dur = 1.65;
-            const len = Math.floor(this.ctx.sampleRate * dur);
-            const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
-            const ch = buf.getChannelData(0);
-
-            let last = 0;
-            for (let i = 0; i < len; i++) {
-              const env = Math.sin((i / len) * Math.PI);
-              const w = Math.random() * 2 - 1;
-              last = (last + 0.14 * w) / 1.14;
-              const pebble = Math.random() < 0.015 ? (Math.random() * 0.6) : 0;
-              ch[i] = (last * 1.4 + pebble) * env;
-            }
-
-            const src = this.ctx.createBufferSource();
-            src.buffer = buf;
-
-            const filter = this.ctx.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(320, now);
-            filter.frequency.linearRampToValueAtTime(520, now + dur * 0.5);
-            filter.frequency.linearRampToValueAtTime(280, now + dur);
-            filter.Q.value = 1.1;
-
-            const gain = this.ctx.createGain();
-            gain.gain.setValueAtTime(0.001, now);
-            gain.gain.linearRampToValueAtTime(0.14, now + 0.5);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-
-            src.connect(filter);
-            filter.connect(gain);
-            gain.connect(this.masterGain);
-            src.start(now);
-
-            for (let k = 0; k < 7; k++) {
-              const tk = now + 0.35 + k * 0.085;
+            song.forEach((syllable) => {
               const osc = this.ctx.createOscillator();
-              const cGain = this.ctx.createGain();
+              const vib = this.ctx.createOscillator();
+              const vibGain = this.ctx.createGain();
+              const gain = this.ctx.createGain();
+
               osc.type = 'sine';
-              osc.frequency.setValueAtTime(1650, tk);
-              osc.frequency.exponentialRampToValueAtTime(620, tk + 0.014);
+              osc.frequency.setValueAtTime(syllable.f1, cursor);
+              osc.frequency.exponentialRampToValueAtTime(syllable.f2, cursor + syllable.dur);
 
-              cGain.gain.setValueAtTime(0.025, tk);
-              cGain.gain.exponentialRampToValueAtTime(0.0004, tk + 0.016);
+              vib.type = 'sine';
+              vib.frequency.value = 7.2;
+              vibGain.gain.value = 16;
+              vib.connect(vibGain);
+              vibGain.connect(osc.frequency);
 
-              osc.connect(cGain);
-              cGain.connect(this.masterGain);
-              osc.start(tk);
-              osc.stop(tk + 0.02);
-            }
+              gain.gain.setValueAtTime(0.0005, cursor);
+              gain.gain.linearRampToValueAtTime(0.038, cursor + 0.03);
+              gain.gain.exponentialRampToValueAtTime(0.0004, cursor + syllable.dur);
+
+              osc.connect(gain);
+              gain.connect(pan);
+
+              osc.start(cursor);
+              vib.start(cursor);
+              osc.stop(cursor + syllable.dur + 0.02);
+              vib.stop(cursor + syllable.dur + 0.02);
+
+              cursor += syllable.gap;
+            });
           } catch (e) {}
 
-          setTimeout(triggerTrailTireRoll, 6500 + Math.random() * 4500);
+          setTimeout(triggerBirdSong, 3400 + Math.random() * 4200);
         };
-        setTimeout(triggerTrailTireRoll, 4000);
+        setTimeout(triggerBirdSong, 1600);
       }
 
-      startAcousticCampfireMusic() {
+      startAcousticAdventureWithHarmonica() {
         const N = {
-          D2: 73.42, E2: 82.41, F2: 87.31, G2: 98.00, A2: 110.00, Bb2: 116.54, C3: 130.81,
+          D2: 73.42, F2: 87.31, G2: 98.00, A2: 110.00, Bb2: 116.54, C3: 130.81,
           D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, Bb3: 233.08, C4: 261.63,
           D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, Bb4: 466.16, C5: 523.25, D5: 587.33
         };
 
-        const themes = {
-          0: {
-            warmth: 1150,
-            bass: [N.D2,0,N.A2, N.D3,0,N.A2, N.Bb2,0,N.F2, N.Bb2,0,N.F2, N.F2,0,N.C3, N.C3,0,N.G2, N.D2,0,N.A2, N.A2,0,N.E2],
-            lead: [N.A3,N.C4,N.D4, 0,N.D4,0, N.D4,N.E4,N.F4, 0,N.F4,0, N.F4,N.G4,N.E4, 0,N.E4,0, N.D4,N.C4,N.C4, N.D4,0,0]
-          },
-          1: {
-            warmth: 1300,
-            bass: [N.D2,0,N.A2, N.D2,N.A2,N.D3, N.Bb2,0,N.F2, N.Bb2,N.F2,N.Bb2, N.G2,0,N.D3, N.A2,0,N.E3, N.D2,0,N.A2, N.D2,0,0],
-            lead: [N.D4,0,N.F4, N.A4,0,N.G4, N.F4,N.E4,N.D4, N.E4,0,0, N.E4,0,N.G4, N.Bb4,0,N.A4, N.G4,N.F4,N.E4, N.D4,0,0]
-          },
-          2: {
-            warmth: 1450,
-            bass: [N.D2,0,N.A2, N.D3,0,N.A2, N.G2,0,N.D3, N.G3,0,N.D3, N.Bb2,0,N.F3, N.C3,0,N.G3, N.D2,0,N.A2, N.D3,0,0],
-            lead: [N.A4,0,N.F4, N.D4,N.E4,N.F4, N.G4,0,N.E4, N.C4,N.D4,N.E4, N.F4,0,N.D4, N.E4,0,N.C4, N.D4,N.E4,N.F4, N.D4,0,0]
-          },
-          3: {
-            warmth: 1200,
-            bass: [N.D2,N.A2,N.D2, N.F2,N.A2,N.F2, N.G2,N.Bb2,N.G2, N.A2,N.C3,N.A2, N.Bb2,N.D3,N.Bb2, N.C3,N.E3,N.C3, N.D2,N.A2,N.D3, N.D2,0,0],
-            lead: [N.D5,N.A4,N.F4, N.D4,N.F4,N.A4, N.Bb4,N.G4,N.E4, N.C4,N.E4,N.G4, N.A4,N.F4,N.D4, N.G4,N.E4,N.C4, N.D4,0,N.A4, N.D5,0,0]
-          },
-          4: {
-            warmth: 1380,
-            bass: [N.D2,0,N.A2, N.F2,0,N.A2, N.C3,0,N.G2, N.E2,0,N.G2, N.Bb2,0,N.F2, N.A2,0,N.E2, N.D2,0,N.A2, N.D2,0,0],
-            lead: [N.F4,0,N.E4, N.D4,0,N.A3, N.E4,0,N.D4, N.C4,0,N.G3, N.D4,0,N.E4, N.F4,0,N.G4, N.A4,N.G4,N.E4, N.D4,0,0]
-          },
-          5: {
-            warmth: 1280,
-            bass: [N.D2,0,N.D2, N.A2,0,N.D2, N.F2,0,N.F2, N.C3,0,N.F2, N.G2,0,N.Bb2, N.A2,0,N.A2, N.D2,N.A2,N.D2, N.D2,0,0],
-            lead: [N.D4,0,N.A4, N.A4,0,N.Bb4, N.C5,0,N.A4, N.F4,0,N.G4, N.A4,0,N.Bb4, N.A4,0,N.G4, N.F4,N.E4,N.C4, N.D4,0,0]
-          },
-          6: {
-            warmth: 1500,
-            bass: [N.D2,0,N.A2, N.D2,0,N.A2, N.Bb2,0,N.F2, N.C3,0,N.G2, N.D2,0,N.A2, N.A2,0,N.E2, N.D2,N.A2,N.D3, N.D2,0,0],
-            lead: [N.A4,N.C5,N.D5, 0,N.D5,0, N.D5,N.D5,N.D5, 0,N.C5,0, N.A4,N.Bb4,N.G4, 0,N.A4,0, N.F4,N.E4,N.C4, N.D4,0,0]
-          }
-        };
+        const bassLine = [
+          N.D2, 0, N.A2, N.D3, 0, N.A2,
+          N.Bb2, 0, N.F2, N.Bb2, 0, N.F2,
+          N.F2, 0, N.C3, N.C3, 0, N.G2,
+          N.D2, 0, N.A2, N.A2, 0, N.E2
+        ];
+
+        const guitarLine = [
+          N.A3, N.C4, N.D4, 0, N.D4, 0,
+          N.D4, N.E4, N.F4, 0, N.F4, 0,
+          N.F4, N.G4, N.E4, 0, N.E4, 0,
+          N.D4, N.C4, N.C4, N.D4, 0, 0
+        ];
+
+        // Linha expressiva de gaita de boca (blues/folk de estrada e trilha)
+        const harmonicaLine = [
+          0, 0, 0, N.D4, N.F4, N.A4,
+          0, 0, N.G4, N.F4, N.E4, 0,
+          0, 0, 0, N.F4, N.G4, N.A4,
+          N.G4, 0, N.F4, N.D4, 0, 0
+        ];
 
         this.timerId = setInterval(() => {
           try {
             if (!this.isRunning || !this.ctx) return;
             const now = this.ctx.currentTime;
-            const theme = themes[this.currentTheme] || themes[0];
             const idx = this.step % 24;
 
             const beatInBar = this.step % 6;
             if (beatInBar === 0 || beatInBar === 3) {
-              this.playAcousticWoodBeat(now, beatInBar === 0 ? 84 : 70, 0.11);
-            } else if (beatInBar === 2 || beatInBar === 5) {
-              this.playAcousticWoodBeat(now, 130, 0.05);
+              this.playAcousticWoodBeat(now, beatInBar === 0 ? 82 : 68, 0.10);
             }
 
-            const bassFreq = theme.bass[idx];
+            const bassFreq = bassLine[idx];
             if (bassFreq > 0) {
-              this.playAcousticGuitarPluck(now, bassFreq, 0.12, 0.34, 520, -0.18);
+              this.playAcousticGuitarPluck(now, bassFreq, 0.11, 0.34, 520, -0.18);
             }
 
-            const leadFreq = theme.lead[idx];
-            if (leadFreq > 0) {
-              this.playAcousticGuitarPluck(now, leadFreq, 0.095, 0.42, theme.warmth, 0.22);
+            const guitarFreq = guitarLine[idx];
+            if (guitarFreq > 0) {
+              this.playAcousticGuitarPluck(now, guitarFreq, 0.085, 0.40, 1280, 0.18);
+            }
+
+            // Gaita de boca suave com leve vibrato e palheta dupla
+            const harpFreq = harmonicaLine[idx];
+            if (harpFreq > 0 && (this.step % 48 < 36)) {
+              this.playHarmonicaReed(now, harpFreq, 0.052, 0.46, 0.08);
             }
 
             this.step++;
           } catch (e) {}
         }, this.stepIntervalMs);
+      }
+
+      playHarmonicaReed(time, freq, volume, duration, panPos) {
+        const reed1 = this.ctx.createOscillator();
+        const reed2 = this.ctx.createOscillator();
+        const reed2Gain = this.ctx.createGain();
+        const vibrato = this.ctx.createOscillator();
+        const vibratoGain = this.ctx.createGain();
+        const bandpass = this.ctx.createBiquadFilter();
+        const env = this.ctx.createGain();
+        const pan = this.createPanner(panPos);
+
+        reed1.type = 'sawtooth';
+        reed1.frequency.setValueAtTime(freq * 0.985, time);
+        reed1.frequency.exponentialRampToValueAtTime(freq, time + 0.05);
+
+        reed2.type = 'triangle';
+        reed2.frequency.setValueAtTime(freq * 1.004, time);
+        reed2Gain.gain.value = 0.55;
+
+        vibrato.type = 'sine';
+        vibrato.frequency.value = 5.6;
+        vibratoGain.gain.value = freq * 0.012;
+        vibrato.connect(vibratoGain);
+        vibratoGain.connect(reed1.frequency);
+        vibratoGain.connect(reed2.frequency);
+
+        bandpass.type = 'bandpass';
+        bandpass.frequency.setValueAtTime(freq * 2.1, time);
+        bandpass.Q.value = 1.4;
+
+        env.gain.setValueAtTime(0.0004, time);
+        env.gain.linearRampToValueAtTime(volume, time + 0.055);
+        env.gain.setValueAtTime(volume * 0.85, time + duration * 0.65);
+        env.gain.exponentialRampToValueAtTime(0.0003, time + duration);
+
+        reed1.connect(bandpass);
+        reed2.connect(reed2Gain);
+        reed2Gain.connect(bandpass);
+        bandpass.connect(env);
+        env.connect(pan);
+        pan.connect(this.masterGain);
+        if (this.outdoorReverb) pan.connect(this.outdoorReverb);
+
+        reed1.start(time);
+        reed2.start(time);
+        vibrato.start(time + 0.08);
+        reed1.stop(time + duration + 0.03);
+        reed2.stop(time + duration + 0.03);
+        vibrato.stop(time + duration + 0.03);
       }
 
       playAcousticGuitarPluck(time, freq, volume, duration, brightness, panPos) {
@@ -2651,10 +2578,10 @@
 
         oscHarm.type = 'sine';
         oscHarm.frequency.setValueAtTime(freq * 2, time);
-        harmGain.gain.value = 0.26;
+        harmGain.gain.value = 0.24;
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(Math.max(freq * 3.8, brightness), time);
+        filter.frequency.setValueAtTime(Math.max(freq * 3.6, brightness), time);
         filter.frequency.exponentialRampToValueAtTime(Math.max(180, freq * 1.35), time + duration);
 
         envGain.gain.setValueAtTime(0.0005, time);
@@ -2667,7 +2594,7 @@
         filter.connect(envGain);
         envGain.connect(pan);
         pan.connect(this.masterGain);
-        if (this.forestReverb) pan.connect(this.forestReverb);
+        if (this.outdoorReverb) pan.connect(this.outdoorReverb);
 
         oscFund.start(time);
         oscHarm.start(time);
@@ -2694,23 +2621,144 @@
 
     const soundEngine = new TrailSoundEngine();
 
+    /* =========================================================================
+       4. LOCUTOR NATURAL EM PT-BR (SELEÇÃO ATIVA, TRECHOS CURTOS E FALLBACK)
+       ========================================================================= */
+    function selectBestPtBrVoice(voices) {
+      if (!Array.isArray(voices) || voices.length === 0) return null;
+
+      const ptVoices = voices.filter(v => {
+        const lang = (v.lang || '').toLowerCase();
+        return lang === 'pt-br' || lang.startsWith('pt-') || lang === 'pt';
+      });
+
+      if (ptVoices.length === 0) return null;
+
+      const isClearlyRobotic = (name) => {
+        const n = (name || '').toLowerCase();
+        return n.includes('espeak') || n.includes('festival') || n.includes('robot') || n.includes('flite');
+      };
+
+      const nonRobotic = ptVoices.filter(v => !isClearlyRobotic(v.name));
+      const pool = nonRobotic.length > 0 ? nonRobotic : ptVoices;
+
+      const priorityMatchers = [
+        (n) => n.includes('natural') && n.includes('pt-br'),
+        (n) => n.includes('natural'),
+        (n) => n.includes('neural'),
+        (n) => n.includes('google') && (n.includes('brasil') || n.includes('português') || n.includes('portugues')),
+        (n) => n.includes('google'),
+        (n) => n.includes('microsoft') && (n.includes('francisca') || n.includes('antonio') || n.includes('antônio') || n.includes('thalita')),
+        (n) => n.includes('microsoft'),
+        (n) => n.includes('luciana') || n.includes('felipe') || n.includes('fernanda') || n.includes('vitoria') || n.includes('vitória')
+      ];
+
+      for (const matchFn of priorityMatchers) {
+        const found = pool.find(v => matchFn((v.name || '').toLowerCase()));
+        if (found) return found;
+      }
+
+      const exactBr = pool.find(v => (v.lang || '').toLowerCase() === 'pt-br');
+      return exactBr || pool[0];
+    }
+
+    function splitIntoNaturalChunks(text) {
+      const cleaned = String(text || '').replace(/\s+/g, ' ').trim();
+      if (!cleaned) return [];
+
+      // Divide por pontuação natural ou vírgulas longas mantendo trechos curtos e fluidos
+      const rawParts = cleaned
+        .split(/(?<=[.!?…])\s+|(?<=,|;|:)\s+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const chunks = [];
+      for (const part of rawParts) {
+        if (part.length <= 72) {
+          chunks.push(part);
+        } else {
+          // Quebra trechos longos em respiros curtos próximos de espaços
+          const words = part.split(' ');
+          let current = '';
+          for (const word of words) {
+            const candidate = current ? `${current} ${word}` : word;
+            if (candidate.length > 68 && current) {
+              chunks.push(current);
+              current = word;
+            } else {
+              current = candidate;
+            }
+          }
+          if (current) chunks.push(current);
+        }
+      }
+      return chunks;
+    }
+
     function speakAnnouncer(text) {
       try {
-        if (!('speechSynthesis' in window)) return;
+        if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+          soundEngine.ringBikeBell(true);
+          return;
+        }
+
+        const chunks = splitIntoNaturalChunks(text);
+        if (chunks.length === 0) return;
+
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pt-BR';
-        utterance.rate = 1.02;
-        utterance.pitch = 1.05;
-        utterance.volume = 1.0;
+        const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+        const chosenVoice = selectBestPtBrVoice(voices);
 
-        const voices = window.speechSynthesis.getVoices();
-        const ptVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('pt-br'))
-                     || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
-        if (ptVoice) utterance.voice = ptVoice;
+        // Fallback suave de áudio / campainha caso não exista voz pt-BR disponível
+        if (!chosenVoice && voices.length === 0) {
+          soundEngine.ringBikeBell(true);
+        }
 
-        window.speechSynthesis.speak(utterance);
-      } catch (err) {}
+        let index = 0;
+        let finishedAnyChunk = false;
+
+        const speakNext = () => {
+          if (index >= chunks.length) return;
+          const chunk = chunks[index++];
+
+          try {
+            const utterance = new SpeechSynthesisUtterance(chunk);
+            utterance.lang = chosenVoice && chosenVoice.lang ? chosenVoice.lang : 'pt-BR';
+            if (chosenVoice) {
+              utterance.voice = chosenVoice;
+            }
+            utterance.rate = 0.96;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.95;
+
+            utterance.onend = () => {
+              finishedAnyChunk = true;
+              if (index < chunks.length) {
+                setTimeout(speakNext, 130);
+              }
+            };
+
+            utterance.onerror = () => {
+              if (!finishedAnyChunk && index === 1) {
+                soundEngine.ringBikeBell(true);
+              }
+              if (index < chunks.length) {
+                setTimeout(speakNext, 120);
+              }
+            };
+
+            window.speechSynthesis.speak(utterance);
+          } catch (err) {
+            if (!finishedAnyChunk) {
+              soundEngine.ringBikeBell(true);
+            }
+          }
+        };
+
+        speakNext();
+      } catch (err) {
+        soundEngine.ringBikeBell(true);
+      }
     }
 
     try {
@@ -2721,19 +2769,12 @@
       }
     } catch (err) {}
 
+    /* =========================================================================
+       5. PARTÍCULAS DE AMBIENTE (VERDE NÉON & CARBONO)
+       ========================================================================= */
     const canvas = document.getElementById('env-canvas');
     const ctx2d = canvas.getContext('2d');
     let particles = [];
-    let activeEnvNumber = 1;
-
-    const ENV_PARTICLE_COLORS = {
-      1: 'rgba(187, 247, 208, ',
-      2: 'rgba(253, 230, 138, ',
-      3: 'rgba(167, 243, 208, ',
-      4: 'rgba(254, 215, 170, ',
-      5: 'rgba(186, 230, 253, ',
-      6: 'rgba(187, 247, 208, '
-    };
 
     function resizeCanvas() {
       try {
@@ -2750,11 +2791,11 @@
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          r: (1.2 + Math.random() * 2.6) * depth,
-          vx: (Math.random() - 0.5) * 0.35 * depth,
-          vy: (-0.12 - Math.random() * 0.38) * depth,
+          r: (1.2 + Math.random() * 2.5) * depth,
+          vx: (Math.random() - 0.5) * 0.32 * depth,
+          vy: (-0.12 - Math.random() * 0.35) * depth,
           phase: Math.random() * Math.PI * 2,
-          alpha: 0.12 + depth * 0.16
+          alpha: 0.14 + depth * 0.18
         });
       }
     }
@@ -2762,7 +2803,7 @@
     function animateCanvas() {
       try {
         ctx2d.clearRect(0, 0, canvas.width, canvas.height);
-        const baseRgba = ENV_PARTICLE_COLORS[activeEnvNumber] || ENV_PARTICLE_COLORS[1];
+        const baseRgba = 'rgba(74, 222, 128, ';
 
         particles.forEach((p) => {
           p.phase += 0.015;
@@ -2791,6 +2832,9 @@
       initParticles();
     });
 
+    /* =========================================================================
+       6. ESTADO, SERVIÇOS, RESUMO, PIX E WHATSAPP
+       ========================================================================= */
     const appState = {
       rulesAccepted: false,
       personalSaved: false,
@@ -2834,12 +2878,12 @@
 
         const isChecked = appState.selectedServices.has(srv.id);
         const label = document.createElement('label');
-        label.className = `env-card service-item-label ${isChecked ? 'selected' : ''}`;
+        label.className = `carbon-card service-item-label ${isChecked ? 'selected' : ''}`;
 
         label.innerHTML = `
           <input type="checkbox" data-srv-id="${srv.id}" ${isChecked ? 'checked' : ''} class="srv-checkbox" />
           <div style="font-size:0.875rem; line-height:1.35;">
-            <span class="env-accent-text" style="font-family:var(--font-mono); font-weight:800; margin-right:4px;">${String(srv.id).padStart(2, '0')}.</span>
+            <span class="neon-text" style="font-family:var(--font-mono); font-weight:800; margin-right:4px;">${String(srv.id).padStart(2, '0')}.</span>
             <strong style="color:#ffffff;">${srv.title}</strong>
             <span style="color:#e2e8f0;"> – ${srv.desc}</span>
           </div>
@@ -2874,7 +2918,7 @@
           btn.classList.remove('locked');
           if (step === 3 && appState.selectedServices.size > 0) {
             badge.textContent = `${appState.selectedServices.size}`;
-            badge.className = 'led-indicator env-accent-text';
+            badge.className = 'led-indicator neon-text';
           } else {
             badge.innerHTML = '<span class="led-dot led-green"></span>';
           }
@@ -2898,20 +2942,18 @@
 
     function switchEnvironment(stepNumber, playBell = true) {
       if (stepNumber > 1 && !appState.personalSaved) {
-        if (playBell) soundEngine.ringBikeBell();
+        if (playBell) soundEngine.ringBikeBell(false);
         const panel1 = document.getElementById('panel-1');
         panel1.classList.remove('shake-anim');
         void panel1.offsetWidth;
         panel1.classList.add('shake-anim');
-        showToast('⚠️ Preencha e salve seus Dados Pessoais (Botão 01) antes de avançar!', 'error');
+        showToast('⚠️ Preencha e salve seus dados em 01 Cadastro antes de avançar.', 'error');
         return;
       }
 
       if (playBell) {
-        soundEngine.ringBikeBell();
+        soundEngine.ringBikeBell(false);
       }
-
-      activeEnvNumber = stepNumber;
 
       document.body.classList.remove('env-1', 'env-2', 'env-3', 'env-4', 'env-5', 'env-6');
       document.body.classList.add(`env-${stepNumber}`);
@@ -2972,54 +3014,54 @@
 
       const servicesHtml = selectedList.length > 0
         ? selectedList.map(s => `<li style="padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.1); font-size:0.875rem; color:#f1f5f9;">
-            <strong class="env-accent-text">• ${s.title}</strong> – ${s.desc}
+            <strong class="neon-text">• ${s.title}</strong> – ${s.desc}
           </li>`).join('')
-        : `<li style="font-size:0.875rem; color:#fde68a;">Nenhum serviço específico marcado ainda (você pode voltar no Botão 03 para marcar).</li>`;
+        : `<li style="font-size:0.875rem; color:#86efac;">Nenhum serviço específico selecionado ainda (você pode marcar em 03 20 Serviços).</li>`;
 
       const conditionsHtml = appState.schedule.conditions.length > 0
-        ? appState.schedule.conditions.map(c => `<span style="display:inline-block; padding:5px 10px; border-radius:8px; background:var(--accent-soft); border:1px solid var(--border-accent); font-size:0.78rem; color:#ffffff; margin:0 6px 6px 0;">✓ ${escapeHTML(c)}</span>`).join('')
+        ? appState.schedule.conditions.map(c => `<span style="display:inline-block; padding:5px 10px; border-radius:8px; background:rgba(34,197,94,0.16); border:1px solid rgba(74,222,128,0.4); font-size:0.78rem; color:#ffffff; margin:0 6px 6px 0;">✓ ${escapeHTML(c)}</span>`).join('')
         : `<span style="font-size:0.82rem; color:#cbd5e1;">Nenhuma condição de local marcada.</span>`;
 
       box.innerHTML = `
-        <div class="env-card" style="padding:18px;">
+        <div class="carbon-card" style="padding:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h4 class="panel-kicker env-accent-text" style="margin:0;">1. Dados do Cliente & Bicicleta</h4>
-            <button type="button" onclick="switchEnvironment(1)" style="background:none; border:none; color:var(--accent-bright); text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
+            <h4 class="panel-kicker neon-text" style="margin:0;">01. Dados do Cliente & Bicicleta / E-Bike</h4>
+            <button type="button" onclick="switchEnvironment(1)" style="background:none; border:none; color:#4ade80; text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
           </div>
           <div class="form-grid-2" style="gap:8px; font-size:0.875rem;">
             <div><span style="color:#cbd5e1;">Cliente:</span> <strong>${escapeHTML(appState.client.name)}</strong></div>
             <div><span style="color:#cbd5e1;">Celular:</span> <strong>${escapeHTML(appState.client.phone)}</strong></div>
             <div class="span-2"><span style="color:#cbd5e1;">Endereço:</span> <strong>${escapeHTML(appState.client.address)}</strong></div>
-            <div class="span-2"><span style="color:#cbd5e1;">Bike / E-Bike:</span> <strong class="env-accent-text">${escapeHTML(appState.client.bike)}</strong></div>
+            <div class="span-2"><span style="color:#cbd5e1;">Bike / E-Bike:</span> <strong class="neon-text">${escapeHTML(appState.client.bike)}</strong></div>
           </div>
         </div>
 
-        <div class="env-card" style="padding:18px;">
+        <div class="carbon-card" style="padding:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h4 class="panel-kicker env-accent-text" style="margin:0;">2. Dia, Horário & Estrutura do Local</h4>
-            <button type="button" onclick="switchEnvironment(2)" style="background:none; border:none; color:var(--accent-bright); text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
+            <h4 class="panel-kicker neon-text" style="margin:0;">02. Dia, Horário & Estrutura do Local</h4>
+            <button type="button" onclick="switchEnvironment(2)" style="background:none; border:none; color:#4ade80; text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
           </div>
           <p style="margin:0 0 12px 0; font-size:0.875rem;">
-            <span style="color:#cbd5e1;">Data Preferencial:</span> <strong>${formatDateBR(appState.schedule.date)}</strong> &nbsp;|&nbsp;
+            <span style="color:#cbd5e1;">Data:</span> <strong>${formatDateBR(appState.schedule.date)}</strong> &nbsp;|&nbsp;
             <span style="color:#cbd5e1;">Horário:</span> <strong>${escapeHTML(appState.schedule.time || 'A combinar')}</strong>
           </p>
           <div>${conditionsHtml}</div>
         </div>
 
-        <div class="env-card" style="padding:18px;">
+        <div class="carbon-card" style="padding:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h4 class="panel-kicker env-accent-text" style="margin:0;">3. Serviços Selecionados (${selectedList.length})</h4>
-            <button type="button" onclick="switchEnvironment(3)" style="background:none; border:none; color:var(--accent-bright); text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
+            <h4 class="panel-kicker neon-text" style="margin:0;">03. Serviços Selecionados (${selectedList.length})</h4>
+            <button type="button" onclick="switchEnvironment(3)" style="background:none; border:none; color:#4ade80; text-decoration:underline; font-size:0.78rem; font-weight:700; cursor:pointer;">Editar</button>
           </div>
           <ul style="list-style:none; padding:0; margin:0;">${servicesHtml}</ul>
         </div>
 
-        <div class="env-card" style="padding:18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
+        <div class="carbon-card" style="padding:18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
           <div>
-            <div style="font-size:0.78rem; color:#cbd5e1;">Taxa Antecipada de Deslocamento & Montagem da Oficina:</div>
-            <div style="font-size:1.15rem; font-weight:900; color:#4ade80;">R$ 75,00 (via Pix para Vinicius Marquês)</div>
+            <div style="font-size:0.78rem; color:#cbd5e1;">Taxa Antecipada de Visita e Montagem da Oficina:</div>
+            <div style="font-size:1.15rem; font-weight:900; color:#4ade80;">R$ 75,00 (Pix para Vinicius Marquês)</div>
           </div>
-          <span class="pill-badge env-accent-bg env-accent-text" style="font-family:var(--font-mono);">Chave Pix: 51995556632</span>
+          <span class="pill-badge neon-pill" style="font-family:var(--font-mono);">Pix: 51995556632</span>
         </div>
       `;
     }
@@ -3041,30 +3083,31 @@
 
       return [
         `🚲 *PEDIDO DE ATENDIMENTO DOMICILIAR — BIKEIN'HOUSE* 🏠`,
-        `Olá *Vinicius Marquês*! Aceitei todas as condições de atendimento do aplicativo e gostaria de agendar a oficina móvel:`,
+        `Olá *Vinicius Marquês*! Aceitei as condições de atendimento em Porto Alegre e gostaria de agendar a oficina móvel:`,
         ``,
-        `👤 *DADOS DO CLIENTE & BIKE:*`,
+        `👤 *01 CADASTRO:*`,
         `• *Nome:* ${appState.client.name}`,
         `• *Celular:* ${appState.client.phone}`,
         `• *Endereço:* ${appState.client.address}`,
         `• *Bicicleta / E-Bike:* ${appState.client.bike}`,
         ``,
-        `📅 *DIA E HORÁRIO PREFERENCIAL:*`,
+        `📅 *02 LOCAL E HORA:*`,
         `• *Data:* ${formatDateBR(appState.schedule.date)}`,
         `• *Horário:* ${appState.schedule.time || 'A confirmar'}`,
-        ``,
-        `🛠️ *CONDIÇÕES DO LOCAL DE MONTAGEM:*`,
         conditionsText,
         ``,
-        `⚙️ *SERVIÇOS SELECIONADOS (${selectedList.length}):*`,
+        `⚙️ *03 SERVIÇOS SELECIONADOS (${selectedList.length}):*`,
         servicesText,
         ``,
-        `💰 *TAXA DE VISITA & PIX (R$ 75,00):*`,
+        `💰 *05 PAGAMENTO PIX (R$ 75,00):*`,
         pixNote,
-        `_(Vou enviar o comprovante do Pix aqui nesta conversa para confirmar a saída da base!)_`
+        `_(Seguirei com o envio do comprovante do Pix aqui no WhatsApp para confirmar a saída da base.)_`
       ].join('\n');
     }
 
+    /* =========================================================================
+       7. INICIALIZAÇÃO E EVENTOS
+       ========================================================================= */
     window.onload = function () {
       resizeCanvas();
       initParticles();
@@ -3079,21 +3122,21 @@
       document.getElementById('btn-start-app').addEventListener('click', () => {
         soundEngine.initAndStart();
         soundEngine.setTheme(0);
-        soundEngine.ringBikeBell();
+        soundEngine.ringBikeBell(false);
 
         document.getElementById('splash-screen').classList.add('hidden');
         document.getElementById('rules-screen').classList.remove('hidden');
 
         setTimeout(() => {
-          speakAnnouncer("Bem-vindo ao aplicativo BikeIn'House, a oficina móvel que vai até você.");
-        }, 300);
+          speakAnnouncer("Olá! Bem-vindo à BikeIn'House. A oficina móvel que vai até você.");
+        }, 320);
       });
 
       document.getElementById('btn-accept-rules').addEventListener('click', () => {
         const checked = document.getElementById('accept-rules-check').checked;
         if (!checked) {
-          soundEngine.ringBikeBell();
-          showToast('⚠️ Marque a caixa "Li e aceito todas as condições de atendimento" para continuar.', 'error');
+          soundEngine.ringBikeBell(false);
+          showToast('⚠️ Marque "Li e aceito todas as condições de atendimento" para continuar.', 'error');
           return;
         }
 
@@ -3101,11 +3144,11 @@
         document.getElementById('rules-screen').classList.add('hidden');
         document.getElementById('workshop-screen').classList.remove('hidden');
         switchEnvironment(1, true);
-        showToast('✅ Condições aceitas! Bem-vindo à recepção da oficina móvel.', 'success');
+        showToast('✅ Condições aceitas! Preencha 01 Cadastro para liberar as etapas.', 'success');
       });
 
       document.getElementById('btn-show-rules').addEventListener('click', () => {
-        soundEngine.ringBikeBell();
+        soundEngine.ringBikeBell(false);
         soundEngine.setTheme(0);
         document.getElementById('workshop-screen').classList.add('hidden');
         document.getElementById('rules-screen').classList.remove('hidden');
@@ -3133,8 +3176,8 @@
         const bike = document.getElementById('input-bike').value.trim();
 
         if (!name || !phone || !address || !bike) {
-          soundEngine.ringBikeBell();
-          showToast('⚠️ Preencha todos os campos obrigatórios (Nome, Celular, Endereço e Modelo da Bike).', 'error');
+          soundEngine.ringBikeBell(false);
+          showToast('⚠️ Preencha Nome, Celular, Endereço e Modelo da Bicicleta ou E-Bike.', 'error');
           return;
         }
 
@@ -3142,10 +3185,10 @@
         appState.personalSaved = true;
 
         document.getElementById('reception-hint').innerHTML =
-          `Cadastro de <strong style="color:#ffffff;">${escapeHTML(name)}</strong> salvo! Todos os 6 ambientes estão liberados acima.`;
+          `Cadastro de <strong style="color:#ffffff;">${escapeHTML(name)}</strong> salvo! Etapas 02 a 06 liberadas.`;
 
         updateProgressAndBadges();
-        showToast('✅ Dados salvos! Avançando para Local e Horário...', 'success');
+        showToast('✅ Dados salvos! Avançando para 02 Local e Hora...', 'success');
         switchEnvironment(2, true);
       });
 
@@ -3169,7 +3212,7 @@
         btn.addEventListener('click', () => {
           const photoUrl = btn.getAttribute('data-bike-photo');
           if (photoUrl) {
-            soundEngine.ringBikeBell();
+            soundEngine.ringBikeBell(false);
             document.getElementById('env-featured-photo').src = photoUrl;
             document.getElementById('realistic-bg-img').src = photoUrl;
           }
@@ -3177,7 +3220,7 @@
       });
 
       document.getElementById('btn-copy-pix').addEventListener('click', () => {
-        soundEngine.ringBikeBell();
+        soundEngine.ringBikeBell(false);
         const pixKey = '51995556632';
         try {
           const tempInput = document.createElement('textarea');
@@ -3201,18 +3244,18 @@
 
       document.getElementById('btn-send-whatsapp').addEventListener('click', () => {
         if (!appState.personalSaved) {
-          showToast('⚠️ Complete seus dados pessoais no Botão 01 primeiro.', 'error');
+          showToast('⚠️ Complete seus dados em 01 Cadastro primeiro.', 'error');
           switchEnvironment(1, true);
           return;
         }
 
-        soundEngine.ringBikeBell();
-        speakAnnouncer("Muito obrigado pela confiança! Vamos deixar a sua bike novinha em folha!");
+        soundEngine.ringBikeBell(false);
+        speakAnnouncer("Obrigado pela confiança! Vamos deixar sua bike pronta para rodar.");
 
         const message = buildWhatsAppMessage();
         const waUrl = `https://wa.me/5551995556632?text=${encodeURIComponent(message)}`;
 
-        showToast('🚀 Abrindo WhatsApp da BikeIn\'House com seu pedido detalhado...', 'success');
+        showToast('🚀 Abrindo WhatsApp de Vinicius Marquês com seu pedido...', 'success');
 
         setTimeout(() => {
           try {
@@ -3223,7 +3266,7 @@
           } catch (err) {
             window.location.href = waUrl;
           }
-        }, 450);
+        }, 500);
       });
     };
   </script>
