@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.viciiousbike_sudo.twa",
+        "sha256_cert_fingerprints": ["A5:DA:86:1E:02:08:46:29:BC:6E:AA:CD:5D:B8:C4:28:78:E0:F4:96:AF:7A:38:35:B2:6E:08:21:05:2F:48:42"]
+      }
+    }]
